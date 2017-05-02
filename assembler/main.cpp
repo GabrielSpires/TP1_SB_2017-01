@@ -1,6 +1,11 @@
 #include "func.h"
+#include <bitset>
 
 int main(int argc, char const *argv[]){
+
+	// int a = -1;
+	// bitset<8> b(a);
+	// cout << b << endl;
 	//Variáveis
 	int PC = 0;
 	ifstream entrada; //arquivo em assembly
@@ -11,11 +16,13 @@ int main(int argc, char const *argv[]){
 
 	Formato instruction;
 
-	vector<Label> lista_labels;
+	vector<Label> lista_labels; //Vetor do tipo Label
+	// vector<> lista_opcodes;
+	int *memoria = new int[255]; //Memoria com 256 posições de inteiro
 	//**********
 
-	entrada.open(argv[1]); 	//Abrindo arquivo com assembly
-	saida.open("saida.mif");//Criando arquivo de saida
+	entrada.open(argv[1]); 	 //Abrindo arquivo com assembly
+	saida.open("saida.mif"); //Criando arquivo de saida
 
 	//Cabeçalho do arquivo tipo .mif
 	saida << "DEPTH = 256;\nWIDTH = 8;\nADDRESS_RADIX = HEX;\nDATA_RADIX = BIN;\nCONTENT\nBEGIN\n" << endl;
@@ -36,7 +43,7 @@ int main(int argc, char const *argv[]){
 
 	while(getline(entrada, pega_linha, '\n')){ //Lê a próxima linha inteira
 		linha.str(string()); //Apaga o buffer da string
-		linha << pega_linha; //Copia a linha no stringStream
+		linha << pega_linha; //Copia o conteúdo de pega_linha em linha
 		// cout << linha.str() << endl; //printa a linha (debug)
 		instruction = decode(linha.str());
 

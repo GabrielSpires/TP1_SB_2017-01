@@ -8,12 +8,19 @@
 
 using namespace std;
 
+typedef struct Tabela_opcodes{
+	string opcode;
+	int op1;
+	int op2;
+	int imediato;
+	int tipo;
+}Tabela_opcodes;
+
 typedef struct Formato{
 	string operador_bin;
 	string reg1_bin;
 	string reg2_bin;
 	string un5;
-	int num_operandos;
 	int PC;
 }Formato;
 

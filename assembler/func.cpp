@@ -53,10 +53,8 @@ Formato decode(string pega_linha){
 	stringstream linha;
 	Label label_aux; //Variavel usada para preencher a lista de labels
 	
-
 	linha << pega_linha; //Joga a string de pega_linha na variavel linha
 	linha >> operador; //Lê a primeira informação da linha (operador ou label)
-
 
 	if (operador == "exit"){
 		formato_inst.operador_bin = "00000";
