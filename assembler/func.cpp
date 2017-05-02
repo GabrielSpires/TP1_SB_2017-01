@@ -1,5 +1,21 @@
 #include "func.h"
 
+void preenche_lista_labels(vector<Label>* lista_labels, int PC, string pega_linha){
+	stringstream linha;
+	string operador;
+	Label label_aux;
+
+	linha << pega_linha; //Joga a string de pega_linha na variavel linha
+	linha >> operador; //Lê a primeira informação da linha (operador ou label)
+
+	if (operador[0] == '_'){
+		label_aux.nome_label = operador;
+		label_aux.endereco_label = PC;
+
+		lista_labels->push_back(label_aux);
+	}
+}
+
 string num_reg(string reg){
 	string reg_num;
 
@@ -31,13 +47,16 @@ string num_reg(string reg){
 	return reg_num;
 }
 
-formato decode(string pega_linha){
-	formato formato_inst;
+Formato decode(string pega_linha){
+	Formato formato_inst;
 	string operador, operando1, operando2;
 	stringstream linha;
-	linha << pega_linha;
+	Label label_aux; //Variavel usada para preencher a lista de labels
+	
 
+	linha << pega_linha; //Joga a string de pega_linha na variavel linha
 	linha >> operador; //Lê a primeira informação da linha (operador ou label)
+
 
 	if (operador == "exit"){
 		formato_inst.operador_bin = "00000";

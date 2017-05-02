@@ -2,14 +2,16 @@
 
 int main(int argc, char const *argv[]){
 	//Variáveis
-	int PC = -1;
+	int PC = 0;
 	ifstream entrada; //arquivo em assembly
 	ofstream saida;   //arquivo em binário
 
 	string pega_linha, operador; //strings
 	stringstream linha;
 
-	formato instruction;
+	Formato instruction;
+
+	vector<Label> lista_labels;
 	//**********
 
 	entrada.open(argv[1]); 	//Abrindo arquivo com assembly
@@ -19,6 +21,19 @@ int main(int argc, char const *argv[]){
 	saida << "DEPTH = 256;\nWIDTH = 8;\nADDRESS_RADIX = HEX;\nDATA_RADIX = BIN;\nCONTENT\nBEGIN\n" << endl;
 	//inicio do programa ********************************
 
+	//Preenche uma lista com as labels e o endereço de cada label
+	while(getline(entrada, pega_linha, '\n')){
+		linha.str(string()); //Apaga o buffer da string
+		linha << pega_linha; //Copia a linha no stringStream
+
+		preenche_lista_labels(&lista_labels, PC, linha.str());
+		PC += 2;
+	}
+
+	PC = 0; //Reseta o PC
+	entrada.clear(); //Limpa a flag EOS (End of File)
+	entrada.seekg(0, ios::beg); //Volta ao inicio do arquivo
+
 	while(getline(entrada, pega_linha, '\n')){ //Lê a próxima linha inteira
 		linha.str(string()); //Apaga o buffer da string
 		linha << pega_linha; //Copia a linha no stringStream
@@ -26,10 +41,10 @@ int main(int argc, char const *argv[]){
 		instruction = decode(linha.str());
 
 		//printa a instrução (debug)
-		PC++; cout << hex << setw(2) << setfill('0') << uppercase << PC << "        :  "; //Valor do PC
-		cout << instruction.operador_bin + instruction.reg1_bin << ";" << endl;	  //Primeiros 8 bits da instrução
-		PC++; cout << hex << setw(2) << setfill('0') << uppercase << PC << "        :  "; //Valor do PC
-		cout << instruction.reg2_bin + instruction.un5 << ";" <<  endl;			  //Últimos 8 bits da instrução
+		cout << hex << setw(2) << setfill('0') << uppercase << PC << "        :  "; 	//Valor do PC
+		cout << instruction.operador_bin + instruction.reg1_bin << ";" << endl; PC++;	//Primeiros 8 bits da instrução
+		cout << hex << setw(2) << setfill('0') << uppercase << PC << "        :  "; 	//Valor do PC
+		cout << instruction.reg2_bin + instruction.un5 << ";" <<  endl; PC++;			//Últimos 8 bits da instrução
 	}
 
 	//fim do programa **********************************
