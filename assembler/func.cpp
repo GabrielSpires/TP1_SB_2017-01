@@ -1,71 +1,112 @@
 #include "func.h"
 
-string operador_binario(string operador){
-	string binario;
+string num_reg(string reg){
+	string reg_num;
+
+	if (reg == "A0"){
+		reg_num = "000";
+	}
+	else if (reg == "A1"){
+		reg_num = "001";
+	}
+	else if (reg == "A2"){
+		reg_num = "010";
+	}
+	else if (reg == "A3"){
+		reg_num = "011";
+	}
+	else if (reg == "A4"){
+		reg_num = "100";
+	}
+	else if (reg == "A5"){
+		reg_num = "101";
+	}
+	else if (reg == "A6"){
+		reg_num = "110";
+	}
+	else /*if (reg == "A7")*/{
+		reg_num = "111";
+	}
+
+	return reg_num;
+}
+
+formato decode(string pega_linha){
+	formato formato_inst;
+	string operador, operando1, operando2;
+	stringstream linha;
+	linha << pega_linha;
+
+	linha >> operador; //Lê a primeira informação da linha (operador ou label)
 
 	if (operador == "exit"){
-		binario = "00000";
+		formato_inst.operador_bin = "00000";
 	}
 	else if (operador == "loadi"){
-		binario = "00001";
+		formato_inst.operador_bin = "00001";
 	}
 	else if (operador == "storei"){
-		binario = "00010";
+		formato_inst.operador_bin = "00010";
 	}
 	else if (operador == "add"){
-		binario = "00011";
+		formato_inst.operador_bin = "00011";
+		linha >> operando1;
+		formato_inst.reg1_bin = num_reg(operando1);
+		linha >> operando2;
+		formato_inst.reg2_bin = num_reg(operando2);
+		formato_inst.un5 = "00000";
 	}
 	else if (operador == "subtract"){
-		binario = "00100";
+		formato_inst.operador_bin = "00100";
 	}
 	else if (operador == "multiply"){
-		binario = "00101";
+		formato_inst.operador_bin = "00101";
 	}
 	else if (operador == "divide"){
-		binario = "00110";
+		formato_inst.operador_bin = "00110";
 	}
 	else if (operador == "jump"){
-		binario = "00111";
+		formato_inst.operador_bin = "00111";
 	}
 	else if (operador == "jmpz"){
-		binario = "01000";
+		formato_inst.operador_bin = "01000";
 	}
 	else if (operador == "jmpn"){
-		binario = "01001";
+		formato_inst.operador_bin = "01001";
 	}
 	else if (operador == "move"){
-		binario = "01010";
+		formato_inst.operador_bin = "01010";
 	}
 	else if (operador == "load"){
-		binario = "01011";
+		formato_inst.operador_bin = "01011";
 	}
 	else if (operador == "store"){
-		binario = "01100";
+		formato_inst.operador_bin = "01100";
 	}
 	else if (operador == "loadc"){
-		binario = "01101";
+		formato_inst.operador_bin = "01101";
 	}
 	else if (operador == "clear"){
-		binario = "01110";
+		formato_inst.operador_bin = "01110";
 	}
 	else if (operador == "negate"){
-		binario = "01111";
+		formato_inst.operador_bin = "01111";
 	}
 	else if (operador == "push"){
-		binario = "10000";
+		formato_inst.operador_bin = "10000";
 	}
 	else if (operador == "pop"){
-		binario = "10001";
+		formato_inst.operador_bin = "10001";
 	}
 	else if (operador == "addi"){
-		binario = "10010";
+		formato_inst.operador_bin = "10010";
 	}
 	else if (operador == "call"){
-		binario = "10011";
+		formato_inst.operador_bin = "10011";
 	}
 	else /*(operador == "return")*/{
-		binario = "10100";
+		formato_inst.operador_bin = "10100";
 	}
 
-	return binario;
+	return formato_inst;
 }
