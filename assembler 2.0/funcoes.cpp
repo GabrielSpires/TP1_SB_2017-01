@@ -68,24 +68,51 @@ void traduz_programa_fonte(ifstream *entrada, vector< bitset<8> > &memoria, vect
 		tipo = busca_tipo(campo, lista_tipos); //Busca na lista qual o tipo da instrução
 		
 		if (tipo == 1){ //exit, return
-			if(campo == "exit"){
+			if (campo == "exit"){
 				memoria[pc] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
 				memoria[pc+1] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
 			}
-			
+			if (campo == "return"){
+				/*
+					A  fazer...
+				*/
+			}
 		}
 		else if (tipo == 2){ //loadi, storei, jmpz, jmpn
+			if (campo == "loadi") operador = "00001"; //Binário do operador loadi
+			if (campo == "storei") operador = "00010";//Binário do operador storei
+			if (campo == "jmpz") operador = "01000"; //Binário do operador jmpz
+			if (campo == "jmpn") operador = "01001"; //Binário do operador jmp
 			
+			instrucao >> campo; //Lê o próximo campo
+			reg1 = num_reg(campo); //Binário do registrador correspondente
+			
+			instrucao >> campo; //Lê o próximo campo
+			if(campo[0] != '_'){ //Testa se o campo é um numero ou se é IO				
+				if (campo == "IO"){ //Se o registrador for o de E/S entao a posição de mem. é a 254
+					addr = bitset<8>(254).to_string();
+				}
+				else { //Se for um numero é só converter pra inteiro e ler da memoria
+					istringstream(campo) >> addr_int; //Converte o end. lido em int
+					addr = bitset<8>(addr_int).to_string(); //Converte o inteiro em binario e o binario em string
+				}
+			}
+			else{ //O campo é uma variavel que começa com "_"
+				addr = bitset<8>(busca_label(campo, lista_labels)).to_string(); //Senão busca o end. da variavel
+			}
+
+			memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
+			memoria[pc+1] = bitset<8>(addr); //Escreve o segundo byte
 		}
 		else if (tipo == 3){ //add, subtract, multiply, divide, move, load, store, negate
-			if(campo == "add") operador = "00011";
-			if(campo == "subtract") operador = "00100";
-			if(campo == "multiply") operador = "00101";
-			if(campo == "divide") operador = "00110";
-			if(campo == "move") operador = "01010";
-			if(campo == "load") operador = "01011";
-			if(campo == "store") operador = "01100";
-			if(campo == "negate") operador = "01111";
+			if (campo == "add") operador = "00011";
+			if (campo == "subtract") operador = "00100";
+			if (campo == "multiply") operador = "00101";
+			if (campo == "divide") operador = "00110";
+			if (campo == "move") operador = "01010";
+			if (campo == "load") operador = "01011";
+			if (campo == "store") operador = "01100";
+			if (campo == "negate") operador = "01111";
 
 			instrucao >> campo; //Lê o próximo campo
 			reg1 = num_reg(campo); //Binário do registrador correspondente
@@ -115,31 +142,31 @@ void traduz_programa_fonte(ifstream *entrada, vector< bitset<8> > &memoria, vect
 		// 	memoria[pc] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
 		// 	memoria[pc+1] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
 		// }
-		else if (campo == "loadi"){ //00001 |op|reg|addr| |5|3|8| OK!
-			operador = "00001"; //Binário do operador loadi
+		// else if (campo == "loadi"){ //00001 |op|reg|addr| |5|3|8| OK!
+		// 	operador = "00001"; //Binário do operador loadi
 			
-			instrucao >> campo; //Lê o próximo campo
-			reg1 = num_reg(campo); //Binário do registrador correspondente
+		// 	instrucao >> campo; //Lê o próximo campo
+		// 	reg1 = num_reg(campo); //Binário do registrador correspondente
 			
-			instrucao >> campo; //Lê o próximo campo
-			if(campo[0] != '_'){ //Testa se o campo é um numero ou se é IO				
-				if (campo == "IO"){ //Se o registrador for o de E/S entao a posição de mem. é a 254
-					addr = bitset<8>(254).to_string();
-				}
-				else { //Se for um numero é só converter pra inteiro e ler da memoria
-					istringstream(campo) >> addr_int; //Converte o end. lido em int
-					addr = bitset<8>(addr_int).to_string(); //Converte o inteiro em binario e o binario em string
-				}
-			}
-			else{ //O campo é uma variavel que começa com "_"
-				addr = bitset<8>(busca_label(campo, lista_labels)).to_string(); //Senão busca o end. da variavel
-			}
+		// 	instrucao >> campo; //Lê o próximo campo
+		// 	if(campo[0] != '_'){ //Testa se o campo é um numero ou se é IO				
+		// 		if (campo == "IO"){ //Se o registrador for o de E/S entao a posição de mem. é a 254
+		// 			addr = bitset<8>(254).to_string();
+		// 		}
+		// 		else { //Se for um numero é só converter pra inteiro e ler da memoria
+		// 			istringstream(campo) >> addr_int; //Converte o end. lido em int
+		// 			addr = bitset<8>(addr_int).to_string(); //Converte o inteiro em binario e o binario em string
+		// 		}
+		// 	}
+		// 	else{ //O campo é uma variavel que começa com "_"
+		// 		addr = bitset<8>(busca_label(campo, lista_labels)).to_string(); //Senão busca o end. da variavel
+		// 	}
 
-			memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
-			memoria[pc+1] = bitset<8>(addr); //Escreve o segundo byte
-		}
-		else if (campo == "storei"){ //00010 |op|reg|addr| |5|3|8|
-		}
+		// 	memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
+		// 	memoria[pc+1] = bitset<8>(addr); //Escreve o segundo byte
+		// }
+		// else if (campo == "storei"){ //00010 |op|reg|addr| |5|3|8|
+		// }
 		// else if (campo == "add"){ //00011 |op|reg|reg|un| |5|3|3|5| OK!
 		// 	operador = "00011";
 
@@ -182,19 +209,14 @@ void traduz_programa_fonte(ifstream *entrada, vector< bitset<8> > &memoria, vect
 		// 	memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
 		// 	memoria[pc+1] = bitset<8>(reg2+un); //Escreve o segundo byte
 		// }
-
-		//			 !!CÓDIGO FICANDO MUITO REPETITIVO!!
-		// !!FAZER TABELA DE TIPOS (CODIGO VAI FICAR MAIS COMPACTO)!!
-		// 			COM ISSO FEITO O TP TA 90%~100% PRONTO
-
 		// else if (campo == "divide"){ //00110 |op|reg|reg|un| |5|3|3|5|
 		// }
 		else if (campo == "jump"){ //00111 |op|un|addr| |5|3|8|
 		}
-		else if (campo == "jmpz"){ //01000 |op|reg|addr| |5|3|8|
-		}
-		else if (campo == "jmpn"){ //01001 |op|reg|addr| |5|3|8|
-		}
+		// else if (campo == "jmpz"){ //01000 |op|reg|addr| |5|3|8|
+		// }
+		// else if (campo == "jmpn"){ //01001 |op|reg|addr| |5|3|8|
+		// }
 		else if (campo == "move"){ //01010 |op|reg|reg|un| |5|3|3|5|
 		}
 		// else if (campo == "load"){ //01011 |op|reg|reg|un| |5|3|3|5|
