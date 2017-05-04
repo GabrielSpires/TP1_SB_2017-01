@@ -1,3 +1,7 @@
 No terminal vá até a pasta do CPUSim e digite esse comando:
 
 java -classpath .:richtextfx-fat-0.6.10.jar cpusim.Main
+
+ou então abra o script .sh
+
+./startCPUSim.sh
