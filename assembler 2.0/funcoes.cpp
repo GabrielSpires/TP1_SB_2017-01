@@ -66,11 +66,55 @@ void traduz_programa_fonte(ifstream *entrada, vector< bitset<8> > &memoria, vect
 		if(campo[0] == '_') instrucao >> campo; //Se leu uma label, leia o prox. campo
 
 		tipo = busca_tipo(campo, lista_tipos); //Busca na lista qual o tipo da instrução
-
-		if (campo == "exit"){ //00000 |op|un| |5|11| OK!
-			memoria[pc] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
-			memoria[pc+1] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
+		
+		if (tipo == 1){ //exit, return
+			if(campo == "exit"){
+				memoria[pc] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
+				memoria[pc+1] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
+			}
+			
 		}
+		else if (tipo == 2){ //loadi, storei, jmpz, jmpn
+			
+		}
+		else if (tipo == 3){ //add, subtract, multiply, divide, move, load, store, negate
+			if(campo == "add") operador = "00011";
+			if(campo == "subtract") operador = "00100";
+			if(campo == "multiply") operador = "00101";
+			if(campo == "divide") operador = "00110";
+			if(campo == "move") operador = "01010";
+			if(campo == "load") operador = "01011";
+			if(campo == "store") operador = "01100";
+			if(campo == "negate") operador = "01111";
+
+			instrucao >> campo; //Lê o próximo campo
+			reg1 = num_reg(campo); //Binário do registrador correspondente
+
+			instrucao >> campo; //Lê o próximo campo
+			reg2 = num_reg(campo); //Binário do registrador correspondente
+
+			un = "00000"; //Bits que não são usados
+
+			memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
+			memoria[pc+1] = bitset<8>(reg2+un); //Escreve o segundo byte
+		}
+		else if (tipo == 4){ //jump, call
+			
+		}
+		else if (tipo == 5){ //loadc, addi
+			
+		}
+		else if (tipo == 6){ //clear, push, pop
+			
+		}
+		else if (tipo == 7){ //.data
+			
+		}
+
+		// if (campo == "exit"){ //00000 |op|un| |5|11| OK!
+		// 	memoria[pc] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
+		// 	memoria[pc+1] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
+		// }
 		else if (campo == "loadi"){ //00001 |op|reg|addr| |5|3|8| OK!
 			operador = "00001"; //Binário do operador loadi
 			
@@ -96,55 +140,55 @@ void traduz_programa_fonte(ifstream *entrada, vector< bitset<8> > &memoria, vect
 		}
 		else if (campo == "storei"){ //00010 |op|reg|addr| |5|3|8|
 		}
-		else if (campo == "add"){ //00011 |op|reg|reg|un| |5|3|3|5| OK!
-			operador = "00011";
+		// else if (campo == "add"){ //00011 |op|reg|reg|un| |5|3|3|5| OK!
+		// 	operador = "00011";
 
-			instrucao >> campo; //Lê o próximo campo
-			reg1 = num_reg(campo); //Binário do registrador correspondente
+		// 	instrucao >> campo; //Lê o próximo campo
+		// 	reg1 = num_reg(campo); //Binário do registrador correspondente
 
-			instrucao >> campo; //Lê o próximo campo
-			reg2 = num_reg(campo); //Binário do registrador correspondente
+		// 	instrucao >> campo; //Lê o próximo campo
+		// 	reg2 = num_reg(campo); //Binário do registrador correspondente
 
-			un = "00000"; //Bits que não são usados
+		// 	un = "00000"; //Bits que não são usados
 
-			memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
-			memoria[pc+1] = bitset<8>(reg2+un); //Escreve o segundo byte
-		}
-		else if (campo == "subtract"){ //00100 |op|reg|reg|un| |5|3|3|5| OK!
-			operador = "00100";
+		// 	memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
+		// 	memoria[pc+1] = bitset<8>(reg2+un); //Escreve o segundo byte
+		// }
+		// else if (campo == "subtract"){ //00100 |op|reg|reg|un| |5|3|3|5| OK!
+		// 	operador = "00100";
 
-			instrucao >> campo; //Lê o próximo campo
-			reg1 = num_reg(campo); //Binário do registrador correspondente
+		// 	instrucao >> campo; //Lê o próximo campo
+		// 	reg1 = num_reg(campo); //Binário do registrador correspondente
 
-			instrucao >> campo; //Lê o próximo campo
-			reg2 = num_reg(campo); //Binário do registrador correspondente
+		// 	instrucao >> campo; //Lê o próximo campo
+		// 	reg2 = num_reg(campo); //Binário do registrador correspondente
 
-			un = "00000"; //Bits que não são usados
+		// 	un = "00000"; //Bits que não são usados
 
-			memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
-			memoria[pc+1] = bitset<8>(reg2+un); //Escreve o segundo byte
-		}
-		else if (campo == "multiply"){ //00101 |op|reg|reg|un| |5|3|3|5| OK?? (Fazer um programa com multiply!!)
-			operador = "00101";
+		// 	memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
+		// 	memoria[pc+1] = bitset<8>(reg2+un); //Escreve o segundo byte
+		// }
+		// else if (campo == "multiply"){ //00101 |op|reg|reg|un| |5|3|3|5| OK?? (Fazer um programa com multiply!!)
+		// 	operador = "00101";
 
-			instrucao >> campo; //Lê o próximo campo
-			reg1 = num_reg(campo); //Binário do registrador correspondente
+		// 	instrucao >> campo; //Lê o próximo campo
+		// 	reg1 = num_reg(campo); //Binário do registrador correspondente
 
-			instrucao >> campo; //Lê o próximo campo
-			reg2 = num_reg(campo); //Binário do registrador correspondente
+		// 	instrucao >> campo; //Lê o próximo campo
+		// 	reg2 = num_reg(campo); //Binário do registrador correspondente
 
-			un = "00000"; //Bits que não são usados
+		// 	un = "00000"; //Bits que não são usados
 
-			memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
-			memoria[pc+1] = bitset<8>(reg2+un); //Escreve o segundo byte
-		}
+		// 	memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
+		// 	memoria[pc+1] = bitset<8>(reg2+un); //Escreve o segundo byte
+		// }
 
 		//			 !!CÓDIGO FICANDO MUITO REPETITIVO!!
 		// !!FAZER TABELA DE TIPOS (CODIGO VAI FICAR MAIS COMPACTO)!!
 		// 			COM ISSO FEITO O TP TA 90%~100% PRONTO
 
-		else if (campo == "divide"){ //00110 |op|reg|reg|un| |5|3|3|5|
-		}
+		// else if (campo == "divide"){ //00110 |op|reg|reg|un| |5|3|3|5|
+		// }
 		else if (campo == "jump"){ //00111 |op|un|addr| |5|3|8|
 		}
 		else if (campo == "jmpz"){ //01000 |op|reg|addr| |5|3|8|
@@ -153,10 +197,10 @@ void traduz_programa_fonte(ifstream *entrada, vector< bitset<8> > &memoria, vect
 		}
 		else if (campo == "move"){ //01010 |op|reg|reg|un| |5|3|3|5|
 		}
-		else if (campo == "load"){ //01011 |op|reg|reg|un| |5|3|3|5|
-		}
-		else if (campo == "store"){ //01100 |op|reg|reg|un| |5|3|3|5|
-		}
+		// else if (campo == "load"){ //01011 |op|reg|reg|un| |5|3|3|5|
+		// }
+		// else if (campo == "store"){ //01100 |op|reg|reg|un| |5|3|3|5|
+		// }
 		else if (campo == "loadc"){ //01101 |op|reg|sgn| |5|3|8|
 		}
 		else if (campo == "clear"){ //01110 |op|reg|un| |5|3|8|
@@ -209,6 +253,16 @@ void escreve_cabecalho_mif(ofstream *saida){
 }
 
 void preenche_tabela_tipos(vector<Tabela_tipos>& lista_tipos){
+	/*	
+		Preenche a tabela de tipos levando em consideração
+		o número de registradores/operandos que cada instrução
+		usa, ou seja, o formato de cada uma.
+		Instruções com o mesmo formato são escritas da mesma
+		forma na memória, com exceção do opcode, então é útil
+		usar uma mesma função para escrever todas as funções de
+		um mesmo tipo.
+	*/
+
 	// |op5|un11|
 	lista_tipos[0].nome_operacao = "exit";
 	lista_tipos[0].tipo_operacao = 1;
@@ -251,19 +305,19 @@ void preenche_tabela_tipos(vector<Tabela_tipos>& lista_tipos){
 
 	// |op5|reg3|sgn8|
 	lista_tipos[16].nome_operacao = "loadc";
-	lista_tipos[16].tipo_operacao = 6;
+	lista_tipos[16].tipo_operacao = 5;
 	lista_tipos[17].nome_operacao = "addi";
-	lista_tipos[17].tipo_operacao = 6;
+	lista_tipos[17].tipo_operacao = 5;
 
 	// |op5|reg3|un8|
 	lista_tipos[18].nome_operacao = "clear";
-	lista_tipos[18].tipo_operacao = 7;
+	lista_tipos[18].tipo_operacao = 6;
 	lista_tipos[19].nome_operacao = "push";
-	lista_tipos[19].tipo_operacao = 7;
+	lista_tipos[19].tipo_operacao = 6;
 	lista_tipos[20].nome_operacao = "pop";
-	lista_tipos[20].tipo_operacao = 7;
+	lista_tipos[20].tipo_operacao = 6;
 
 	// |.data|numBytes|valor|
 	lista_tipos[21].nome_operacao = ".data";
-	lista_tipos[21].tipo_operacao = 8;
+	lista_tipos[21].tipo_operacao = 7;
 }

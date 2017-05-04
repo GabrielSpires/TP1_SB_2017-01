@@ -21,11 +21,11 @@ int main(int argc, char const *argv[]){
 
 	preenche_tabela_tipos(lista_tipos);
 
-	// for (int i = 0; i < tipos_operacao.size(); ++i){
-	// 	cout << tipos_operacao[i].nome_operacao << "\t";
-	// 	cout << tipos_operacao[i].tipo_operacao << endl;
+	// for (int i = 0; i < lista_tipos.size(); ++i){
+	// 	cout << lista_tipos[i].nome_operacao << "\t";
+	// 	cout << lista_tipos[i].tipo_operacao << endl;
 	// }
-	// cout << tipos_operacao.size() << " instruções" << endl;
+	// cout << lista_tipos.size() << " instruções" << endl;
 
 	entrada.open(argv[1]); //Abre o arquivo de entrada usando o primeiro argumento
 	saida.open("saida.mif"); //Cria o arquivo de saida
@@ -43,9 +43,9 @@ int main(int argc, char const *argv[]){
 	traduz_programa_fonte(&entrada, memoria, lista_labels, lista_tipos); //Passagem 2
 
 	//Printa a memória
-	// for(int i=0; i<55; i++, pc++){
-	// 	cout << hex << setw(2) << setfill('0') << uppercase << pc << " : " << memoria[i] << ";" << endl; //Printa a memoria
-	// }
+	for(int i=0; i<55; i++, pc++){
+		cout << hex << setw(2) << setfill('0') << uppercase << pc << " : " << memoria[i] << ";" << endl; //Printa a memoria
+	}
 
 	entrada.close();
 	saida.close();
