@@ -1,5 +1,4 @@
 #include "func.h"
-#include <bitset>
 
 int main(int argc, char const *argv[]){
 
