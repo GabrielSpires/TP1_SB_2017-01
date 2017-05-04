@@ -17,7 +17,15 @@ int main(int argc, char const *argv[]){
 	stringstream instrucao; //String manipulável que guarda a instrução atual lida do arq.
 	string le_instrucao; //String normal que le do arquivo (nao da pra usar a stringstream)
 	vector<Label> lista_labels; //Lista do tipo Label que guarda o nome e endereço de cada label
+	vector<Tabela_tipos> lista_tipos(22);
 
+	preenche_tabela_tipos(lista_tipos);
+
+	// for (int i = 0; i < tipos_operacao.size(); ++i){
+	// 	cout << tipos_operacao[i].nome_operacao << "\t";
+	// 	cout << tipos_operacao[i].tipo_operacao << endl;
+	// }
+	// cout << tipos_operacao.size() << " instruções" << endl;
 
 	entrada.open(argv[1]); //Abre o arquivo de entrada usando o primeiro argumento
 	saida.open("saida.mif"); //Cria o arquivo de saida
@@ -26,17 +34,18 @@ int main(int argc, char const *argv[]){
 	escreve_cabecalho_mif(&saida);
 
 	//Preenche a lista de labels com o nome e endereço de cada uma
-	preenche_lista_labels(&entrada, &lista_labels); //Passagem 1
+	preenche_lista_labels(&entrada, lista_labels); //Passagem 1
 
 	//O arquivo foi todo lido, então precisamos resetar para ler denovo
 	entrada.clear(); //Limpa a flag EOS (End of File)
 	entrada.seekg(0, ios::beg); //Volta a ler do inicio do arquivo
 	
-	traduz_programa_fonte(&entrada, memoria, lista_labels); //Passagem 2
+	traduz_programa_fonte(&entrada, memoria, lista_labels, lista_tipos); //Passagem 2
 
-	for(int i=0; i<55; i++, pc++){
-		cout << hex << setw(2) << setfill('0') << uppercase << pc << " : " << memoria[i] << ";" << endl; //Printa a memoria
-	}
+	//Printa a memória
+	// for(int i=0; i<55; i++, pc++){
+	// 	cout << hex << setw(2) << setfill('0') << uppercase << pc << " : " << memoria[i] << ";" << endl; //Printa a memoria
+	// }
 
 	entrada.close();
 	saida.close();
