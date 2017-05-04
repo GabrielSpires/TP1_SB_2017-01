@@ -57,11 +57,11 @@ void traduz_programa_fonte(ifstream *entrada, vector< bitset<8> > &memoria, vect
 		
 		if(campo[0] == '_') instrucao >> campo; //Se leu uma label, leia o prox. campo
 
-		if (campo == "exit"){ //00000 |op|un| |5|11|
-			memoria[pc] = bitset<8>(string("00000000"));
-			memoria[pc+1] = bitset<8>(string("00000000"));
+		if (campo == "exit"){ //00000 |op|un| |5|11| OK!
+			memoria[pc] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
+			memoria[pc+1] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
 		}
-		else if (campo == "loadi"){ //00001 |op|reg|addr| |5|3|8|
+		else if (campo == "loadi"){ //00001 |op|reg|addr| |5|3|8| OK!
 			operador = "00001"; //Binário do operador loadi
 			
 			instrucao >> campo; //Lê o próximo campo
@@ -81,17 +81,58 @@ void traduz_programa_fonte(ifstream *entrada, vector< bitset<8> > &memoria, vect
 				addr = bitset<8>(busca_label(campo, lista_labels)).to_string(); //Senão busca o end. da variavel
 			}
 
-			memoria[pc] = bitset<8>(operador+reg1);
-			memoria[pc+1] = bitset<8>(addr);
+			memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
+			memoria[pc+1] = bitset<8>(addr); //Escreve o segundo byte
 		}
 		else if (campo == "storei"){ //00010 |op|reg|addr| |5|3|8|
 		}
-		else if (campo == "add"){ //00011 |op|reg|reg|un| |5|3|3|5|
+		else if (campo == "add"){ //00011 |op|reg|reg|un| |5|3|3|5| OK!
+			operador = "00011";
+
+			instrucao >> campo; //Lê o próximo campo
+			reg1 = num_reg(campo); //Binário do registrador correspondente
+
+			instrucao >> campo; //Lê o próximo campo
+			reg2 = num_reg(campo); //Binário do registrador correspondente
+
+			un = "00000"; //Bits que não são usados
+
+			memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
+			memoria[pc+1] = bitset<8>(reg2+un); //Escreve o segundo byte
 		}
-		else if (campo == "subtract"){ //00100 |op|reg|reg|un| |5|3|3|5|
+		else if (campo == "subtract"){ //00100 |op|reg|reg|un| |5|3|3|5| OK!
+			operador = "00100";
+
+			instrucao >> campo; //Lê o próximo campo
+			reg1 = num_reg(campo); //Binário do registrador correspondente
+
+			instrucao >> campo; //Lê o próximo campo
+			reg2 = num_reg(campo); //Binário do registrador correspondente
+
+			un = "00000"; //Bits que não são usados
+
+			memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
+			memoria[pc+1] = bitset<8>(reg2+un); //Escreve o segundo byte
 		}
-		else if (campo == "multiply"){ //00101 |op|reg|reg|un| |5|3|3|5|
+		else if (campo == "multiply"){ //00101 |op|reg|reg|un| |5|3|3|5| OK?? (Fazer um programa com multiply!!)
+			operador = "00101";
+
+			instrucao >> campo; //Lê o próximo campo
+			reg1 = num_reg(campo); //Binário do registrador correspondente
+
+			instrucao >> campo; //Lê o próximo campo
+			reg2 = num_reg(campo); //Binário do registrador correspondente
+
+			un = "00000"; //Bits que não são usados
+
+			memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
+			memoria[pc+1] = bitset<8>(reg2+un); //Escreve o segundo byte
 		}
+
+		//			 !!CÓDIGO FICANDO MUITO REPETITIVO!!
+		// !!FAZER TABELA DE TIPOS (CODIGO VAI FICAR MAIS COMPACTO)!!
+		// 			COM ISSO FEITO O TP TA 90%~100% PRONTO
+
 		else if (campo == "divide"){ //00110 |op|reg|reg|un| |5|3|3|5|
 		}
 		else if (campo == "jump"){ //00111 |op|un|addr| |5|3|8|
