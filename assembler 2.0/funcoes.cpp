@@ -50,7 +50,8 @@ void traduz_programa_fonte(ifstream *entrada, vector< bitset<8> > &memoria, vect
 	int pc = 0, addr_int; //addr_int é a variável que converte o endereço de string p/ int
 
 	while(getline(*entrada, le_instrucao, '\n')){
-		instrucao.str(string()); //Apaga o buffer da string
+		instrucao.str(string("")); //Limpa a string pra ler a proxima
+		instrucao.clear(); //Apaga o buffer da string
 		instrucao << le_instrucao; //Joga a string de le_instrucao na variavel instrucao
 		instrucao >> campo; //Lê a primeira informação da instrucao (operador ou label)
 		
@@ -67,11 +68,18 @@ void traduz_programa_fonte(ifstream *entrada, vector< bitset<8> > &memoria, vect
 			reg1 = num_reg(campo); //Binário do registrador correspondente
 			
 			instrucao >> campo; //Lê o próximo campo
-			istringstream(campo) >> addr_int; //Converte o end. lido em int
-			if(campo[0] != '_') //Testa se é um numero ou uma variavel (_coisa)
-				addr = memoria[addr_int].to_string(); //Se for numero só busca na mem.
-			else
+			if(campo[0] != '_'){ //Testa se o campo é um numero ou se é IO				
+				if (campo == "IO"){ //Se o registrador for o de E/S entao a posição de mem. é a 254
+					addr = bitset<8>(254).to_string();
+				}
+				else { //Se for um numero é só converter pra inteiro e ler da memoria
+					istringstream(campo) >> addr_int; //Converte o end. lido em int
+					addr = bitset<8>(addr_int).to_string(); //Converte o inteiro em binario e o binario em string
+				}
+			}
+			else{ //O campo é uma variavel que começa com "_"
 				addr = bitset<8>(busca_label(campo, lista_labels)).to_string(); //Senão busca o end. da variavel
+			}
 
 			memoria[pc] = bitset<8>(operador+reg1);
 			memoria[pc+1] = bitset<8>(addr);
@@ -129,7 +137,8 @@ void preenche_lista_labels(ifstream *entrada, vector<Label>* lista_labels){
 	int pc = 0;
 
 	while(getline(*entrada, le_instrucao, '\n')){ //Lê a linha até o enter
-		instrucao.str(string("")); //Apaga o que foi lido anteriormente
+		instrucao.str(string("")); //Limpa a string pra ler a proxima
+		instrucao.clear(); //Apaga o buffer da string
 		instrucao << le_instrucao; //Joga o que foi lido na string manipulavel
 		instrucao >> label; //Lê a primeira informação da linha (operador ou label)
 

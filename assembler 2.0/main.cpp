@@ -35,9 +35,11 @@ int main(int argc, char const *argv[]){
 	traduz_programa_fonte(&entrada, memoria, lista_labels); //Passagem 2
 
 	for(int i=0; i<55; i++, pc++){
-		cout << hex << setw(2) << setfill('0') << uppercase << pc << " : " << memoria[i] << endl; //Printa a memoria
+		cout << hex << setw(2) << setfill('0') << uppercase << pc << " : " << memoria[i] << ";" << endl; //Printa a memoria
 	}
 
+	entrada.close();
+	saida.close();
 	return 0;
 }
 
