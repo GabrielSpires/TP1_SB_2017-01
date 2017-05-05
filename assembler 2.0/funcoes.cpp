@@ -67,7 +67,7 @@ void traduz_programa_fonte(ifstream *entrada, vector< bitset<8> > &memoria, vect
 
 		tipo = busca_tipo(campo, lista_tipos); //Busca na lista qual o tipo da instrução
 		
-		if (tipo == 1){ //exit, return
+		if (tipo == 1){ //exit, return |op|un| |5|11|
 			if (campo == "exit"){
 				memoria[pc] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
 				memoria[pc+1] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
@@ -78,7 +78,7 @@ void traduz_programa_fonte(ifstream *entrada, vector< bitset<8> > &memoria, vect
 				*/
 			}
 		}
-		else if (tipo == 2){ //loadi, storei, jmpz, jmpn
+		else if (tipo == 2){ //loadi, storei, jmpz, jmpn |op|reg|addr| |5|3|8|
 			if (campo == "loadi") operador = "00001"; //Binário do operador loadi
 			if (campo == "storei") operador = "00010";//Binário do operador storei
 			if (campo == "jmpz") operador = "01000"; //Binário do operador jmpz
@@ -104,7 +104,7 @@ void traduz_programa_fonte(ifstream *entrada, vector< bitset<8> > &memoria, vect
 			memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
 			memoria[pc+1] = bitset<8>(addr); //Escreve o segundo byte
 		}
-		else if (tipo == 3){ //add, subtract, multiply, divide, move, load, store, negate
+		else if (tipo == 3){ //add, subtract, multiply, divide, move, load, store, negate |op|reg|reg|un| |5|3|3|5|
 			if (campo == "add") operador = "00011";
 			if (campo == "subtract") operador = "00100";
 			if (campo == "multiply") operador = "00101";
