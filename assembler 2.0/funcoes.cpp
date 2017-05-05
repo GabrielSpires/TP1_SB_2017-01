@@ -139,90 +139,20 @@ void traduz_programa_fonte(ifstream *entrada, vector< bitset<8> > &memoria, vect
 		}
 
 		// if (campo == "exit"){ //00000 |op|un| |5|11| OK!
-		// 	memoria[pc] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
-		// 	memoria[pc+1] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
-		// }
 		// else if (campo == "loadi"){ //00001 |op|reg|addr| |5|3|8| OK!
-		// 	operador = "00001"; //Binário do operador loadi
-			
-		// 	instrucao >> campo; //Lê o próximo campo
-		// 	reg1 = num_reg(campo); //Binário do registrador correspondente
-			
-		// 	instrucao >> campo; //Lê o próximo campo
-		// 	if(campo[0] != '_'){ //Testa se o campo é um numero ou se é IO				
-		// 		if (campo == "IO"){ //Se o registrador for o de E/S entao a posição de mem. é a 254
-		// 			addr = bitset<8>(254).to_string();
-		// 		}
-		// 		else { //Se for um numero é só converter pra inteiro e ler da memoria
-		// 			istringstream(campo) >> addr_int; //Converte o end. lido em int
-		// 			addr = bitset<8>(addr_int).to_string(); //Converte o inteiro em binario e o binario em string
-		// 		}
-		// 	}
-		// 	else{ //O campo é uma variavel que começa com "_"
-		// 		addr = bitset<8>(busca_label(campo, lista_labels)).to_string(); //Senão busca o end. da variavel
-		// 	}
-
-		// 	memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
-		// 	memoria[pc+1] = bitset<8>(addr); //Escreve o segundo byte
-		// }
 		// else if (campo == "storei"){ //00010 |op|reg|addr| |5|3|8|
-		// }
 		// else if (campo == "add"){ //00011 |op|reg|reg|un| |5|3|3|5| OK!
-		// 	operador = "00011";
-
-		// 	instrucao >> campo; //Lê o próximo campo
-		// 	reg1 = num_reg(campo); //Binário do registrador correspondente
-
-		// 	instrucao >> campo; //Lê o próximo campo
-		// 	reg2 = num_reg(campo); //Binário do registrador correspondente
-
-		// 	un = "00000"; //Bits que não são usados
-
-		// 	memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
-		// 	memoria[pc+1] = bitset<8>(reg2+un); //Escreve o segundo byte
-		// }
 		// else if (campo == "subtract"){ //00100 |op|reg|reg|un| |5|3|3|5| OK!
-		// 	operador = "00100";
-
-		// 	instrucao >> campo; //Lê o próximo campo
-		// 	reg1 = num_reg(campo); //Binário do registrador correspondente
-
-		// 	instrucao >> campo; //Lê o próximo campo
-		// 	reg2 = num_reg(campo); //Binário do registrador correspondente
-
-		// 	un = "00000"; //Bits que não são usados
-
-		// 	memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
-		// 	memoria[pc+1] = bitset<8>(reg2+un); //Escreve o segundo byte
-		// }
 		// else if (campo == "multiply"){ //00101 |op|reg|reg|un| |5|3|3|5| OK?? (Fazer um programa com multiply!!)
-		// 	operador = "00101";
-
-		// 	instrucao >> campo; //Lê o próximo campo
-		// 	reg1 = num_reg(campo); //Binário do registrador correspondente
-
-		// 	instrucao >> campo; //Lê o próximo campo
-		// 	reg2 = num_reg(campo); //Binário do registrador correspondente
-
-		// 	un = "00000"; //Bits que não são usados
-
-		// 	memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
-		// 	memoria[pc+1] = bitset<8>(reg2+un); //Escreve o segundo byte
-		// }
 		// else if (campo == "divide"){ //00110 |op|reg|reg|un| |5|3|3|5|
-		// }
 		else if (campo == "jump"){ //00111 |op|un|addr| |5|3|8|
 		}
 		// else if (campo == "jmpz"){ //01000 |op|reg|addr| |5|3|8|
-		// }
 		// else if (campo == "jmpn"){ //01001 |op|reg|addr| |5|3|8|
-		// }
 		else if (campo == "move"){ //01010 |op|reg|reg|un| |5|3|3|5|
 		}
 		// else if (campo == "load"){ //01011 |op|reg|reg|un| |5|3|3|5|
-		// }
 		// else if (campo == "store"){ //01100 |op|reg|reg|un| |5|3|3|5|
-		// }
 		else if (campo == "loadc"){ //01101 |op|reg|sgn| |5|3|8|
 		}
 		else if (campo == "clear"){ //01110 |op|reg|un| |5|3|8|

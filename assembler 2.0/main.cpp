@@ -28,7 +28,7 @@ int main(int argc, char const *argv[]){
 	// cout << lista_tipos.size() << " instruções" << endl;
 
 	entrada.open(argv[1]); //Abre o arquivo de entrada usando o primeiro argumento
-	saida.open("saida.mif"); //Cria o arquivo de saida
+	saida.open(argv[2]); //Cria o arquivo de saida
 
 	//Escreve o cabeçalho do arquivo tipo .mif
 	escreve_cabecalho_mif(&saida);
