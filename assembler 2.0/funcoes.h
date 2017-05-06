@@ -27,7 +27,7 @@ typedef struct Label{
 int busca_tipo(string, vector<Tabela_tipos>);
 int busca_label(string, vector<Label>);
 string num_reg(string);
-void traduz_programa_fonte(ifstream*, vector<bitset<8> >&, vector<Label>, vector<Tabela_tipos>);
+void traduz_programa_fonte(ifstream*, vector<bitset<8> >&, vector<Label>, vector<Tabela_tipos>, stack<bitset<8> >);
 void preenche_lista_labels(ifstream*, vector<Label>&);
 void escreve_cabecalho_mif(ofstream*);
 void preenche_tabela_tipos(vector<Tabela_tipos>&);

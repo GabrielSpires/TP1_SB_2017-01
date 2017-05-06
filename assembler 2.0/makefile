@@ -5,6 +5,7 @@ run: main.cpp funcoes.cpp
 	g++ -o mont main.cpp funcoes.cpp
 	clear
 	./mont ../tst/teste.a saida.mif
+	cat saida.mif
 
 val: main.cpp funcoes.cpp
 	g++ -g -o mont main.cpp funcoes.cpp

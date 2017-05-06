@@ -40,20 +40,38 @@ int main(int argc, char const *argv[]){
 	entrada.clear(); //Limpa a flag EOS (End of File)
 	entrada.seekg(0, ios::beg); //Volta a ler do inicio do arquivo
 	
-	traduz_programa_fonte(&entrada, memoria, lista_labels, lista_tipos); //Passagem 2
+	traduz_programa_fonte(&entrada, memoria, lista_labels, lista_tipos, pilha); //Passagem 2
+
+	entrada.clear(); //Limpa a flag EOS (End of File)
+	entrada.seekg(0, ios::beg); //Volta a ler do inicio do arquivo
 
 	//Printa a memória
 	for(int i=0; i<55; i++, pc++){
-		cout << hex << setw(2) << setfill('0') << uppercase << pc << " : " << memoria[i] << ";" << endl; //Printa a memoria
+		saida << hex << setw(2) << setfill('0') << uppercase << pc << "        :  " << memoria[i] << ";";
+		if(i%2 == 0 && getline(entrada, le_instrucao, '\n')){
+			saida << "              -- " << le_instrucao << endl;
+		}
+		else{
+				saida << "              -- " << endl;
+		}
 	}
+	saida << "END;" << endl;
 
 	entrada.close();
 	saida.close();
 	return 0;
 }
 
+/*
 	// Printa a lista de labels
-	// for(int i=0; i<lista_labels.size(); i++){
-	// 	cout << lista_labels[i].nome_label << " - ";
-	// 	cout << hex << lista_labels[i].endereco_label << endl;
-	// }
+	for(int i=0; i<lista_labels.size(); i++){
+		cout << lista_labels[i].nome_label << " - ";
+		cout << hex << lista_labels[i].endereco_label << endl;
+	}
+
+	Fazer ao menos dois programas em Assembly que, juntos, executem ao menos dois
+	terços das instruções da máquina Swombat (melhor testar todas) e ao menos uma
+	chamada de função ou procedimento.
+
+	Pra rodar o TP usar sempre "make run" 
+*/

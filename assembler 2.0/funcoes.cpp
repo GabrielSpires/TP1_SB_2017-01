@@ -50,12 +50,16 @@ string num_reg(string reg){
 	return reg_num;
 }
 
-void traduz_programa_fonte(ifstream *entrada, vector< bitset<8> > &memoria, vector<Label> lista_labels, vector<Tabela_tipos> lista_tipos){
+void traduz_programa_fonte(ifstream *entrada, 
+							vector<bitset<8> > &memoria, 
+							vector<Label> lista_labels, 
+							vector<Tabela_tipos> lista_tipos,
+							stack<bitset<8> > pilha){
 	stringstream instrucao; //String manipulável que guarda a instrução
 	string le_instrucao, //Usada no getline() pra ler o arquivo
 		   campo, //Recebe um a um os campos da instrução
-		   operador, reg1, reg2, addr, un; //Operandos possiveis
-	int pc = 0, addr_int, tipo; //addr_int é a variável que converte o endereço de string p/ int
+		   operador, reg1, reg2, addr, un, sgn; //Operandos possiveis
+	int pc = 0, addr_int, sgn_int, tipo; //addr_int é a variável que converte o endereço de string p/ int
 
 	while(getline(*entrada, le_instrucao, '\n')){
 		instrucao.str(string("")); //Limpa a string pra ler a proxima
@@ -73,9 +77,14 @@ void traduz_programa_fonte(ifstream *entrada, vector< bitset<8> > &memoria, vect
 				memoria[pc+1] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
 			}
 			if (campo == "return"){
-				/*
-					A  fazer...
+				/* RETURN
+				Encerra um procedimento e retorna para endereço especificado
+				pelo valor no topo da pilha. ATENÇÃO: uma função chamada
+				que insere elementos na pilha deve obrigatoriamente removê-los
+				antes do return.
 				*/
+
+				// !!fazer!!
 			}
 		}
 		else if (tipo == 2){ //loadi, storei, jmpz, jmpn |op|reg|addr| |5|3|8|
@@ -125,36 +134,77 @@ void traduz_programa_fonte(ifstream *entrada, vector< bitset<8> > &memoria, vect
 			memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
 			memoria[pc+1] = bitset<8>(reg2+un); //Escreve o segundo byte
 		}
-		else if (tipo == 4){ //jump, call
+		else if (tipo == 4){ //jump, call |op|un|addr| |5|3|8|
+
+			if (campo == "jump"){
+				operador = "00111";
+
+				instrucao >> campo; //Lê o próximo campo
+				if(campo[0] != '_'){ //O campo lido não é uma label (é um inteiro)
+					istringstream(campo) >> addr_int; //Converte o end. lido em int
+					addr = bitset<8>(addr_int).to_string(); //Converte o inteiro em binario e o binario em string
+				}
+				else{ //O campo é uma label
+					addr = bitset<8>(busca_label(campo, lista_labels)).to_string(); //Senão busca o end. da variavel
+				}
+			}
+			else if (campo == "call"){
+				/* CALL
+				Chama o procedimento que está contido no endereço de memória
+				especificado. Empilha o endereço da próxima instrução a ser
+				chamada (pc, antes do redirecionamento) para ser usado pelo
+				return posteriormente.
+				*/
+				operador = "10011";
+
+				// !!fazer!!
+			}
 			
+			un = "000"; //Bits que não são usados
+
+			memoria[pc] = bitset<8>(operador+un); //Escreve o primeiro byte
+			memoria[pc+1] = bitset<8>(addr); //Escreve o segundo byte
 		}
-		else if (tipo == 5){ //loadc, addi
-			
+		else if (tipo == 5){ //loadc, addi |op|reg|sgn| |5|3|8|
+			if (campo == "loadc") operador = "01101";
+			if (campo == "addi") operador = "10010";
+
+			instrucao >> campo; //Lê o próximo campo
+			reg1 = num_reg(campo); //Binário do registrador correspondente
+
+			instrucao >> campo; //Lê o próximo campo (o immediato/constante)
+			istringstream(campo) >> sgn_int; //Converte a constante lida em inteiro
+			sgn = bitset<8>(sgn_int).to_string(); //Converte o inteiro em binário e depois em string
+
+			memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
+			memoria[pc+1] = bitset<8>(sgn); //Escreve o segundo byte			
 		}
 		else if (tipo == 6){ //clear, push, pop
 			
 		}
-		else if (tipo == 7){ //.data
+		else if (tipo == 7){ // _.data
 			
 		}
 
+		// O que tiver comentado daqui pra baixo é pq já foi feito
+		
 		// if (campo == "exit"){ //00000 |op|un| |5|11| OK!
-		// else if (campo == "loadi"){ //00001 |op|reg|addr| |5|3|8| OK!
+		// else if (campo == "loadi"){ //00001 |op|reg|addr| |5|3|8|
 		// else if (campo == "storei"){ //00010 |op|reg|addr| |5|3|8|
-		// else if (campo == "add"){ //00011 |op|reg|reg|un| |5|3|3|5| OK!
-		// else if (campo == "subtract"){ //00100 |op|reg|reg|un| |5|3|3|5| OK!
-		// else if (campo == "multiply"){ //00101 |op|reg|reg|un| |5|3|3|5| OK?? (Fazer um programa com multiply!!)
+		// else if (campo == "add"){ //00011 |op|reg|reg|un| |5|3|3|5|
+		// else if (campo == "subtract"){ //00100 |op|reg|reg|un| |5|3|3|5|
+		// else if (campo == "multiply"){ //00101 |op|reg|reg|un| |5|3|3|5|
 		// else if (campo == "divide"){ //00110 |op|reg|reg|un| |5|3|3|5|
-		else if (campo == "jump"){ //00111 |op|un|addr| |5|3|8|
-		}
+		// else if (campo == "jump"){ //00111 |op|un|addr| |5|3|8|
+		// }
 		// else if (campo == "jmpz"){ //01000 |op|reg|addr| |5|3|8|
 		// else if (campo == "jmpn"){ //01001 |op|reg|addr| |5|3|8|
 		else if (campo == "move"){ //01010 |op|reg|reg|un| |5|3|3|5|
 		}
 		// else if (campo == "load"){ //01011 |op|reg|reg|un| |5|3|3|5|
 		// else if (campo == "store"){ //01100 |op|reg|reg|un| |5|3|3|5|
-		else if (campo == "loadc"){ //01101 |op|reg|sgn| |5|3|8|
-		}
+		// else if (campo == "loadc"){ //01101 |op|reg|sgn| |5|3|8|
+		// }
 		else if (campo == "clear"){ //01110 |op|reg|un| |5|3|8|
 		}
 		else if (campo == "negate"){ //01111 |op|reg|reg|un| |5|3|3|5|
@@ -163,8 +213,8 @@ void traduz_programa_fonte(ifstream *entrada, vector< bitset<8> > &memoria, vect
 		}
 		else if (campo == "pop"){ //10001 |op|reg|un| |5|3|8|
 		}
-		else if (campo == "addi"){ //10010 |op|reg|sgn| |5|3|8|
-		}
+		// else if (campo == "addi"){ //10010 |op|reg|sgn| |5|3|8|
+		// }
 		else if (campo == "call"){ //10011 |op|un|addr| |5|3|8|
 		}
 		else if(campo == "return"){ //10100 |op|un| |5|11|
