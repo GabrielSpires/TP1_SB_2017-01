@@ -182,12 +182,12 @@ void traduz_programa_fonte(ifstream *entrada,
 		else if (tipo == 6){ //clear, push, pop
 			
 		}
-		else if (tipo == 7){ // _.data
+		else if (tipo == 7){ // _label .data
 			
 		}
 
 		// O que tiver comentado daqui pra baixo é pq já foi feito
-		
+
 		// if (campo == "exit"){ //00000 |op|un| |5|11| OK!
 		// else if (campo == "loadi"){ //00001 |op|reg|addr| |5|3|8|
 		// else if (campo == "storei"){ //00010 |op|reg|addr| |5|3|8|
@@ -225,6 +225,8 @@ void traduz_programa_fonte(ifstream *entrada,
 		pc += 2; //Incrementa o PC (cada instrução ocupa 2 espaços na mem.)
 	}
 
+	entrada->clear(); //Limpa a flag EOS (End of File)
+	entrada->seekg(0, ios::beg); //Volta a ler do inicio do arquivo
 }
 
 void preenche_lista_labels(ifstream *entrada, vector<Label>& lista_labels){
@@ -248,10 +250,30 @@ void preenche_lista_labels(ifstream *entrada, vector<Label>& lista_labels){
 		}
 		pc += 2;
 	}
+	//O arquivo foi todo lido, então precisamos resetar para ler denovo
+	entrada->clear(); //Limpa a flag EOS (End of File)
+	entrada->seekg(0, ios::beg); //Volta a ler do inicio do arquivo
 }
 
 void escreve_cabecalho_mif(ofstream *saida){
 	*saida << "DEPTH = 256;\nWIDTH = 8;\nADDRESS_RADIX = HEX;\nDATA_RADIX = BIN;\nCONTENT\nBEGIN\n" << endl;
+}
+
+void printa_memoria(ifstream *entrada, ofstream *saida, vector<bitset<8> > memoria){
+	string le_instrucao;
+	int pc = 0;
+
+	//Só printa no arquivo de acordo com o formato do arquivo .mif
+	for(int i=0; i<55; i++, pc++){
+		*saida << hex << setw(2) << setfill('0') << uppercase << pc << "        :  " << memoria[i] << ";";
+		if(i%2 == 0 && getline(*entrada, le_instrucao, '\n')){
+			*saida << "              -- " << le_instrucao << endl;
+		}
+		else{
+				*saida << "              -- " << endl;
+		}
+	}
+	*saida << "END;" << endl; //Rodapé do arquivo de saída .mif
 }
 
 void preenche_tabela_tipos(vector<Tabela_tipos>& lista_tipos){

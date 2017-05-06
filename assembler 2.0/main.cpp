@@ -36,26 +36,11 @@ int main(int argc, char const *argv[]){
 	//Preenche a lista de labels com o nome e endereço de cada uma
 	preenche_lista_labels(&entrada, lista_labels); //Passagem 1
 
-	//O arquivo foi todo lido, então precisamos resetar para ler denovo
-	entrada.clear(); //Limpa a flag EOS (End of File)
-	entrada.seekg(0, ios::beg); //Volta a ler do inicio do arquivo
-	
+	//Transforma cada instrução lida em seu equivalente binário
 	traduz_programa_fonte(&entrada, memoria, lista_labels, lista_tipos, pilha); //Passagem 2
 
-	entrada.clear(); //Limpa a flag EOS (End of File)
-	entrada.seekg(0, ios::beg); //Volta a ler do inicio do arquivo
-
-	//Printa a memória
-	for(int i=0; i<55; i++, pc++){
-		saida << hex << setw(2) << setfill('0') << uppercase << pc << "        :  " << memoria[i] << ";";
-		if(i%2 == 0 && getline(entrada, le_instrucao, '\n')){
-			saida << "              -- " << le_instrucao << endl;
-		}
-		else{
-				saida << "              -- " << endl;
-		}
-	}
-	saida << "END;" << endl;
+	//Printa o conteúdo da memória no arquivo de saída
+	printa_memoria(&entrada, &saida, memoria);	
 
 	entrada.close();
 	saida.close();
@@ -68,6 +53,11 @@ int main(int argc, char const *argv[]){
 		cout << lista_labels[i].nome_label << " - ";
 		cout << hex << lista_labels[i].endereco_label << endl;
 	}
+	
+	A fazer:
+	//Terminar a função traduz_programa_fonte()
+	//TIRAR O LIMITE DE 55 DA SAÍDA (ta assim só pra teste)
+	//Escrever e testar os programas em assembly (testar no CPUSim)
 
 	Fazer ao menos dois programas em Assembly que, juntos, executem ao menos dois
 	terços das instruções da máquina Swombat (melhor testar todas) e ao menos uma

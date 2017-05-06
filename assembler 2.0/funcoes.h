@@ -30,4 +30,5 @@ string num_reg(string);
 void traduz_programa_fonte(ifstream*, vector<bitset<8> >&, vector<Label>, vector<Tabela_tipos>, stack<bitset<8> >);
 void preenche_lista_labels(ifstream*, vector<Label>&);
 void escreve_cabecalho_mif(ofstream*);
+void printa_memoria(ifstream*, ofstream*, vector<bitset<8> >);
 void preenche_tabela_tipos(vector<Tabela_tipos>&);
