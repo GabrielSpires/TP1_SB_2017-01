@@ -21,12 +21,6 @@ int main(int argc, char const *argv[]){
 
 	preenche_tabela_tipos(lista_tipos);
 
-	// for (int i = 0; i < lista_tipos.size(); ++i){
-	// 	cout << lista_tipos[i].nome_operacao << "\t";
-	// 	cout << lista_tipos[i].tipo_operacao << endl;
-	// }
-	// cout << lista_tipos.size() << " instruções" << endl;
-
 	entrada.open(argv[1]); //Abre o arquivo de entrada usando o primeiro argumento
 	saida.open(argv[2]); //Cria o arquivo de saida
 
@@ -48,6 +42,13 @@ int main(int argc, char const *argv[]){
 }
 
 /*
+	//Printa a lista de tipos
+	// for (int i = 0; i < lista_tipos.size(); ++i){
+	// 	cout << lista_tipos[i].nome_operacao << "\t";
+	// 	cout << lista_tipos[i].tipo_operacao << endl;
+	// }
+	// cout << lista_tipos.size() << " instruções" << endl;
+
 	// Printa a lista de labels
 	for(int i=0; i<lista_labels.size(); i++){
 		cout << lista_labels[i].nome_label << " - ";

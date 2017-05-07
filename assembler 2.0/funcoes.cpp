@@ -76,7 +76,7 @@ void traduz_programa_fonte(ifstream *entrada,
 				memoria[pc] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
 				memoria[pc+1] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
 			}
-			if (campo == "return"){
+			else if (campo == "return"){
 				/* RETURN
 				Encerra um procedimento e retorna para endereço especificado
 				pelo valor no topo da pilha. ATENÇÃO: uma função chamada
@@ -89,9 +89,9 @@ void traduz_programa_fonte(ifstream *entrada,
 		}
 		else if (tipo == 2){ //loadi, storei, jmpz, jmpn |op|reg|addr| |5|3|8|
 			if (campo == "loadi") operador = "00001"; //Binário do operador loadi
-			if (campo == "storei") operador = "00010";//Binário do operador storei
-			if (campo == "jmpz") operador = "01000"; //Binário do operador jmpz
-			if (campo == "jmpn") operador = "01001"; //Binário do operador jmp
+			else if (campo == "storei") operador = "00010";//Binário do operador storei
+			else if (campo == "jmpz") operador = "01000"; //Binário do operador jmpz
+			else if (campo == "jmpn") operador = "01001"; //Binário do operador jmp
 			
 			instrucao >> campo; //Lê o próximo campo
 			reg1 = num_reg(campo); //Binário do registrador correspondente
@@ -115,13 +115,13 @@ void traduz_programa_fonte(ifstream *entrada,
 		}
 		else if (tipo == 3){ //add, subtract, multiply, divide, move, load, store, negate |op|reg|reg|un| |5|3|3|5|
 			if (campo == "add") operador = "00011";
-			if (campo == "subtract") operador = "00100";
-			if (campo == "multiply") operador = "00101";
-			if (campo == "divide") operador = "00110";
-			if (campo == "move") operador = "01010";
-			if (campo == "load") operador = "01011";
-			if (campo == "store") operador = "01100";
-			if (campo == "negate") operador = "01111";
+			else if (campo == "subtract") operador = "00100";
+			else if (campo == "multiply") operador = "00101";
+			else if (campo == "divide") operador = "00110";
+			else if (campo == "move") operador = "01010";
+			else if (campo == "load") operador = "01011";
+			else if (campo == "store") operador = "01100";
+			else if (campo == "negate") operador = "01111";
 
 			instrucao >> campo; //Lê o próximo campo
 			reg1 = num_reg(campo); //Binário do registrador correspondente
@@ -167,7 +167,7 @@ void traduz_programa_fonte(ifstream *entrada,
 		}
 		else if (tipo == 5){ //loadc, addi |op|reg|sgn| |5|3|8|
 			if (campo == "loadc") operador = "01101";
-			if (campo == "addi") operador = "10010";
+			else if (campo == "addi") operador = "10010";
 
 			instrucao >> campo; //Lê o próximo campo
 			reg1 = num_reg(campo); //Binário do registrador correspondente
@@ -179,8 +179,24 @@ void traduz_programa_fonte(ifstream *entrada,
 			memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
 			memoria[pc+1] = bitset<8>(sgn); //Escreve o segundo byte			
 		}
-		else if (tipo == 6){ //clear, push, pop
-			
+		else if (tipo == 6){ //clear, push, pop |op|reg|un| |5|3|8|
+			if (campo == "clear"){
+				operador = "01110";
+
+				instrucao >> campo; //Lê o próximo campo
+				reg1 = num_reg(campo); //Binário do registrador correspondente
+			}
+			else if (campo == "push"){
+				operador = "10000";
+			}
+			else if (campo == "pop"){
+				operador = "10001";
+			}
+
+			un = "00000000"; //Bits que não são usados
+
+			memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
+			memoria[pc+1] = bitset<8>(un); //Escreve o segundo byte
 		}
 		else if (tipo == 7){ // _label .data
 			
