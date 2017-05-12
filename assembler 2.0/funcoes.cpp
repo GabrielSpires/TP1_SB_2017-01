@@ -76,7 +76,7 @@ void traduz_programa_fonte(ifstream *entrada,
 				memoria[pc] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
 				memoria[pc+1] = bitset<8>(string("00000000")); //Escreve 8 zeros na memoria
 			}
-			else if (campo == "return"){
+			else if (campo == "return"){ //10100 |op|un| |5|11|
 				/* RETURN
 				Encerra um procedimento e retorna para endereço especificado
 				pelo valor no topo da pilha. ATENÇÃO: uma função chamada
@@ -84,7 +84,9 @@ void traduz_programa_fonte(ifstream *entrada,
 				antes do return.
 				*/
 
-				// !!fazer!!
+				operador = "10100";
+				memoria[pc] = bitset<8>(string(operador + "000")); //Escreve o operando e completa com zeros
+				memoria[pc+1] = bitset<8>(string("00000000")); //Escreve o segundo byte (8 zeros)
 			}
 		}
 		else if (tipo == 2){ //loadi, storei, jmpz, jmpn |op|reg|addr| |5|3|8|
@@ -149,15 +151,10 @@ void traduz_programa_fonte(ifstream *entrada,
 				}
 			}
 			else if (campo == "call"){
-				/* CALL
-				Chama o procedimento que está contido no endereço de memória
-				especificado. Empilha o endereço da próxima instrução a ser
-				chamada (pc, antes do redirecionamento) para ser usado pelo
-				return posteriormente.
-				*/
 				operador = "10011";
 
-				// !!fazer!!
+				instrucao >> campo;
+				addr = bitset<8>(busca_label(campo, lista_labels)).to_string(); //Busca o end. da variavel
 			}
 			
 			un = "000"; //Bits que não são usados
@@ -180,18 +177,12 @@ void traduz_programa_fonte(ifstream *entrada,
 			memoria[pc+1] = bitset<8>(sgn); //Escreve o segundo byte			
 		}
 		else if (tipo == 6){ //clear, push, pop |op|reg|un| |5|3|8|
-			if (campo == "clear"){
-				operador = "01110";
+			if (campo == "clear") operador = "01110";
+			else if (campo == "push") operador = "10000";
+			else if (campo == "pop") operador = "10001";
 
-				instrucao >> campo; //Lê o próximo campo
-				reg1 = num_reg(campo); //Binário do registrador correspondente
-			}
-			else if (campo == "push"){
-				operador = "10000";
-			}
-			else if (campo == "pop"){
-				operador = "10001";
-			}
+			instrucao >> campo; //Lê o próximo campo
+			reg1 = num_reg(campo); //Binário do registrador correspondente
 
 			un = "00000000"; //Bits que não são usados
 
@@ -215,28 +206,27 @@ void traduz_programa_fonte(ifstream *entrada,
 		// }
 		// else if (campo == "jmpz"){ //01000 |op|reg|addr| |5|3|8|
 		// else if (campo == "jmpn"){ //01001 |op|reg|addr| |5|3|8|
-		else if (campo == "move"){ //01010 |op|reg|reg|un| |5|3|3|5|
-		}
+		// else if (campo == "move"){ //01010 |op|reg|reg|un| |5|3|3|5|
+		// }
 		// else if (campo == "load"){ //01011 |op|reg|reg|un| |5|3|3|5|
 		// else if (campo == "store"){ //01100 |op|reg|reg|un| |5|3|3|5|
 		// else if (campo == "loadc"){ //01101 |op|reg|sgn| |5|3|8|
 		// }
-		else if (campo == "clear"){ //01110 |op|reg|un| |5|3|8|
-		}
-		else if (campo == "negate"){ //01111 |op|reg|reg|un| |5|3|3|5|
-		}
-		else if (campo == "push"){ //10000 |op|reg|un| |5|3|8|
-		}
-		else if (campo == "pop"){ //10001 |op|reg|un| |5|3|8|
-		}
+		// else if (campo == "clear"){ //01110 |op|reg|un| |5|3|8|
+		// }
+		// else if (campo == "negate"){ //01111 |op|reg|reg|un| |5|3|3|5|
+		// }
 		// else if (campo == "addi"){ //10010 |op|reg|sgn| |5|3|8|
 		// }
-		else if (campo == "call"){ //10011 |op|un|addr| |5|3|8|
-		}
-		else if(campo == "return"){ //10100 |op|un| |5|11|
-		}
+		// else if (campo == "push"){ //10000 |op|reg|un| |5|3|8|
+		// }
+		// else if (campo == "pop"){ //10001 |op|reg|un| |5|3|8|
+		// }
+		// else if (campo == "call"){ //10011 |op|un|addr| |5|3|8|
+		// }
+		// else if(campo == "return"){ //10100 |op|un| |5|11|
+		// }
 		else if(campo == ".data"){ //Reserva um espaço em memória
-
 		}
 		pc += 2; //Incrementa o PC (cada instrução ocupa 2 espaços na mem.)
 	}

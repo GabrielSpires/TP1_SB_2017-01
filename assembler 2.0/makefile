@@ -4,7 +4,7 @@ tp1: main.cpp funcoes.cpp
 run: main.cpp funcoes.cpp
 	g++ -o mont main.cpp funcoes.cpp
 	clear
-	./mont ../tst/teste.a saida.mif
+	./mont ../tst/push_pop_teste.a saida.mif
 	cat saida.mif
 
 val: main.cpp funcoes.cpp

@@ -1,0 +1,9 @@
+loadc A0 10				;A0 <- 10
+push A0
+loadc A1 20				;A1 <- 20
+push A1
+pop A2					;A2 <- A1
+pop A3					;A3 <- A0
+add A2 A3				;A2 = A2 + A3
+storei A2 IO			;imprime valor de A2 na tela
+exit
