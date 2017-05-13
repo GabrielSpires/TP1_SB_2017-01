@@ -54,12 +54,13 @@ void traduz_programa_fonte(ifstream *entrada,
 							vector<bitset<8> > &memoria, 
 							vector<Label> lista_labels, 
 							vector<Tabela_tipos> lista_tipos,
-							stack<bitset<8> > pilha){
+							int ILC){
 	stringstream instrucao; //String manipulável que guarda a instrução
 	string le_instrucao, //Usada no getline() pra ler o arquivo
 		   campo, //Recebe um a um os campos da instrução
 		   operador, reg1, reg2, addr, un, sgn; //Operandos possiveis
-	int pc = 0, addr_int, sgn_int, tipo; //addr_int é a variável que converte o endereço de string p/ int
+	int pc = 0, addr_int, sgn_int, num_bytes, valor_data, tipo; //addr_int é a variável que converte o endereço de string p/ int
+	string num_bytes_string, valor_data_string;
 
 	while(getline(*entrada, le_instrucao, '\n')){
 		instrucao.str(string("")); //Limpa a string pra ler a proxima
@@ -182,8 +183,19 @@ void traduz_programa_fonte(ifstream *entrada,
 			memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
 			memoria[pc+1] = bitset<8>(un); //Escreve o segundo byte
 		}
-		else if (tipo == 7){ // _label .data
-			
+		else if (tipo == 7){ // _label |.data|num_bytes|valor|
+			instrucao >> campo; //Lê o numero de bytes a alocar
+			istringstream(campo) >> num_bytes;
+
+			instrucao >> campo; //Lê o valor a ser alocado
+			istringstream(campo) >> valor_data; //Joga o valor (string) em um int
+
+			num_bytes_string = bitset<8*256>(num_bytes).to_string();
+			valor_data_string = bitset<8*256>(valor_data).to_string();
+
+			for (int i = 0; i < num_bytes; i++, ILC++){
+				memoria[ILC] = bitset<8>(valor_data_string.substr(valor_data_string.size()-(8*(num_bytes-i)), 8));
+			}
 		}
 
 		// O que tiver comentado daqui pra baixo é pq já foi feito
@@ -228,7 +240,7 @@ void traduz_programa_fonte(ifstream *entrada,
 	entrada->seekg(0, ios::beg); //Volta a ler do inicio do arquivo
 }
 
-void preenche_lista_labels(ifstream *entrada, vector<Label>& lista_labels){
+void preenche_lista_labels(ifstream *entrada, vector<Label>& lista_labels, int *ILC){
 	stringstream instrucao;
 	string le_instrucao, label;
 	Label label_aux;
@@ -246,12 +258,15 @@ void preenche_lista_labels(ifstream *entrada, vector<Label>& lista_labels){
 			label_aux.endereco_label = pc;
 
 			lista_labels.push_back(label_aux);
+			instrucao >> label;
+			if(label == ".data") *ILC -= 2;
 		}
 		pc += 2;
 	}
 	//O arquivo foi todo lido, então precisamos resetar para ler denovo
 	entrada->clear(); //Limpa a flag EOS (End of File)
 	entrada->seekg(0, ios::beg); //Volta a ler do inicio do arquivo
+	*ILC += pc;
 }
 
 void escreve_cabecalho_mif(ofstream *saida){

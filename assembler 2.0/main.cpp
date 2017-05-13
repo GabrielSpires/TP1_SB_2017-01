@@ -11,7 +11,7 @@ int main(int argc, char const *argv[]){
 				mar, //Armazena um endereço a ser lido ou escrito na mem.
 				mdr, //Dado recém lido ou a ser escrito na mem.
 				status; //Flag halt-bit (se setada interrompe o programa)
-	int			pc=0; //Program counter (end. de memoria da próx. instr.)
+	int			ILC=0; //Instruction Location Counter (to usando pra saber até que posição a memória é usada)
 	ifstream entrada; //InputFile em assembly
 	ofstream saida; //OutputFile em formato .mif
 	stringstream instrucao; //String manipulável que guarda a instrução atual lida do arq.
@@ -28,13 +28,16 @@ int main(int argc, char const *argv[]){
 	escreve_cabecalho_mif(&saida);
 
 	//Preenche a lista de labels com o nome e endereço de cada uma
-	preenche_lista_labels(&entrada, lista_labels); //Passagem 1
+	preenche_lista_labels(&entrada, lista_labels, &ILC); //Passagem 1
 
 	//Transforma cada instrução lida em seu equivalente binário
-	traduz_programa_fonte(&entrada, memoria, lista_labels, lista_tipos, pilha); //Passagem 2
+	traduz_programa_fonte(&entrada, memoria, lista_labels, lista_tipos, ILC); //Passagem 2
 
 	//Printa o conteúdo da memória no arquivo de saída
 	printa_memoria(&entrada, &saida, memoria);
+
+	cout << hex << ILC << endl;
+	// cout << bitset<8*2>(12) << endl;
 
 	entrada.close();
 	saida.close();

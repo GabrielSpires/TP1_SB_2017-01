@@ -18,7 +18,7 @@ _D_one: loadi A0 _sign      ; D_one: load the _sign into A0
         jmpn A0 _neg        ; if _sign < 0 jump to neg
         jump _pos           ; jump to pos
 _neg: subtract A1 A2        ; neg: A1 = A1-A2 = -sum
-move A2 A1                  ; copy A1 into A2
+      move A2 A1            ; copy A1 into A2
 _pos: storei A2 IO          ; pos: output the final sum in A2
 exit                        ; stop
 _neg_one:   .data 2 -1      ; _neg_one: constant -1
