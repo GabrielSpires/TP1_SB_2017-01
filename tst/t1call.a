@@ -1,0 +1,30 @@
+;faz a soma, media e produto dos registradores
+;o registrador A1 eh o unico que vai mudar
+;no final mostra o valor de cada registrador
+
+loadc A0 2	;A0 <- 2
+loadi A1 IO	;A1 <- m
+loadi A2 IO	;A2 <- n
+call _soma
+;storei A1 IO
+call _media
+;storei A1 IO
+call _produto
+;storei A1 IO
+storei A0 IO
+storei A1 IO
+storei A2 IO
+exit
+_soma:
+	add A1 A2
+	storei A1 IO	;mostra a soma de A1 e A2
+return	 	 
+_media:
+	add A1 A2
+	divide A1 A0	;divide a soma por 2
+	storei A1 IO
+return
+_produto:
+	multiply A1 A2
+	storei A1 IO
+return

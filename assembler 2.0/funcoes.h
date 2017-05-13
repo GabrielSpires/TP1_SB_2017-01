@@ -26,10 +26,3 @@ void preenche_lista_labels(ifstream*, vector<Label>&, int*);
 void escreve_cabecalho_mif(ofstream*);
 void printa_memoria(ifstream*, ofstream*, vector<bitset<8> >);
 void preenche_tabela_tipos(vector<Tabela_tipos>&);
-
-//Anotações:
-/*
-	a = b.to_string(); //Como jogar binario em string
-	b = bitset<3>(a);  //Como jogar string em binario
-	pilha.push(bitset<8>(string("11110000"))); //Como jogar binario na pilha
-*/

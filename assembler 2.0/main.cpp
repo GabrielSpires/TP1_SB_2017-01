@@ -36,9 +36,6 @@ int main(int argc, char const *argv[]){
 	//Printa o conteúdo da memória no arquivo de saída
 	printa_memoria(&entrada, &saida, memoria);
 
-	cout << hex << ILC << endl;
-	// cout << bitset<8*2>(12) << endl;
-
 	entrada.close();
 	saida.close();
 	return 0;

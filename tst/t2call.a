@@ -1,0 +1,23 @@
+;testa uma call dentro da outra
+
+loadc A0 10	;A0 <- 10
+loadi A1 IO
+loadc A3 5
+call _mult
+storei A0 IO
+storei A1 IO
+storei A2 IO
+storei A3 IO
+exit
+_mult:
+    multiply A1 A0
+    storei A1 IO
+    loadc A2 2
+    call _sum
+    multiply A2 A3
+    storei A2 IO
+return
+_sum:
+    add A2 A1
+    storei A2 IO
+return

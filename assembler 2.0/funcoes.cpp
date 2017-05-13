@@ -183,16 +183,17 @@ void traduz_programa_fonte(ifstream *entrada,
 			memoria[pc] = bitset<8>(operador+reg1); //Escreve o primeiro byte
 			memoria[pc+1] = bitset<8>(un); //Escreve o segundo byte
 		}
-		else if (tipo == 7){ // _label |.data|num_bytes|valor|
+		else if (tipo == 7){ // _label .data num_bytes valor
 			instrucao >> campo; //Lê o numero de bytes a alocar
 			istringstream(campo) >> num_bytes;
 
 			instrucao >> campo; //Lê o valor a ser alocado
 			istringstream(campo) >> valor_data; //Joga o valor (string) em um int
 
-			num_bytes_string = bitset<8*256>(num_bytes).to_string();
-			valor_data_string = bitset<8*256>(valor_data).to_string();
+			valor_data_string = bitset<8*256>(valor_data).to_string(); //String de bits que guarda o valor
 
+			//Guarda na memória cada byte do valor alocado, um a um
+			//ILC é usado pra saber em qual posição a últma instrução foi colocada na memória
 			for (int i = 0; i < num_bytes; i++, ILC++){
 				memoria[ILC] = bitset<8>(valor_data_string.substr(valor_data_string.size()-(8*(num_bytes-i)), 8));
 			}
@@ -231,8 +232,8 @@ void traduz_programa_fonte(ifstream *entrada,
 		// }
 		// else if(campo == "return"){ //10100 |op|un| |5|11| ******************
 		// }
-		else if(campo == ".data"){ //Reserva um espaço em memória
-		}
+		// else if(campo == ".data"){ //Reserva um espaço em memória
+		// }
 		pc += 2; //Incrementa o PC (cada instrução ocupa 2 espaços na mem.)
 	}
 
@@ -278,14 +279,14 @@ void printa_memoria(ifstream *entrada, ofstream *saida, vector<bitset<8> > memor
 	int pc = 0;
 
 	//Só printa no arquivo de acordo com o formato do arquivo .mif
-	for(int i=0; i<55; i++, pc++){
+	for(int i=0; i<memoria.size(); i++, pc++){
 		*saida << hex << setw(2) << setfill('0') << uppercase << pc << "        :  " << memoria[i] << ";";
-		if(i%2 == 0 && getline(*entrada, le_instrucao, '\n')){
-			*saida << "              -- " << le_instrucao << endl;
-		}
-		else{
+		// if(i%2 == 0 && getline(*entrada, le_instrucao, '\n')){
+		// 	*saida << "              -- " << le_instrucao << endl;
+		// }
+		// else{
 				*saida << "              -- " << endl;
-		}
+		// }
 	}
 	*saida << "END;" << endl; //Rodapé do arquivo de saída .mif
 }
