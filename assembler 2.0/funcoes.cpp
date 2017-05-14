@@ -199,41 +199,14 @@ void traduz_programa_fonte(ifstream *entrada,
 			}
 		}
 
-		// O que tiver comentado daqui pra baixo é pq já foi feito
-
-		// if (campo == "exit"){ //00000 |op|un| |5|11| OK!
-		// else if (campo == "loadi"){ //00001 |op|reg|addr| |5|3|8|
-		// else if (campo == "storei"){ //00010 |op|reg|addr| |5|3|8|
-		// else if (campo == "add"){ //00011 |op|reg|reg|un| |5|3|3|5|
-		// else if (campo == "subtract"){ //00100 |op|reg|reg|un| |5|3|3|5|
-		// else if (campo == "multiply"){ //00101 |op|reg|reg|un| |5|3|3|5|
+		// Testar essas funções em assembly
 		// else if (campo == "divide"){ //00110 |op|reg|reg|un| |5|3|3|5| ******************
-		// else if (campo == "jump"){ //00111 |op|un|addr| |5|3|8|
-		// }
-		// else if (campo == "jmpz"){ //01000 |op|reg|addr| |5|3|8|
 		// else if (campo == "jmpn"){ //01001 |op|reg|addr| |5|3|8| ******************
-		// else if (campo == "move"){ //01010 |op|reg|reg|un| |5|3|3|5| 
-		// }
 		// else if (campo == "load"){ //01011 |op|reg|reg|un| |5|3|3|5| ******************
 		// else if (campo == "store"){ //01100 |op|reg|reg|un| |5|3|3|5| ******************
-		// else if (campo == "loadc"){ //01101 |op|reg|sgn| |5|3|8|
-		// }
 		// else if (campo == "clear"){ //01110 |op|reg|un| |5|3|8| ******************
-		// }
-		// else if (campo == "negate"){ //01111 |op|reg|reg|un| |5|3|3|5|
-		// }
-		// else if (campo == "addi"){ //10010 |op|reg|sgn| |5|3|8|
-		// }
-		// else if (campo == "push"){ //10000 |op|reg|un| |5|3|8|
-		// }
-		// else if (campo == "pop"){ //10001 |op|reg|un| |5|3|8|
-		// }
 		// else if (campo == "call"){ //10011 |op|un|addr| |5|3|8| ******************
-		// }
 		// else if(campo == "return"){ //10100 |op|un| |5|11| ******************
-		// }
-		// else if(campo == ".data"){ //Reserva um espaço em memória
-		// }
 		pc += 2; //Incrementa o PC (cada instrução ocupa 2 espaços na mem.)
 	}
 

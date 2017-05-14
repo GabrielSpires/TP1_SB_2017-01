@@ -1,5 +1,10 @@
 tp1: main.cpp funcoes.cpp
 	g++ -o mont main.cpp funcoes.cpp
+	@echo ""
+	@echo "Programa compilado!"
+	@echo "Um executável chamado 'mont' foi criado."
+	@echo "Para executar use o comando ./mont entrada.a saida.mif"
+	@echo ""
 
 run: main.cpp funcoes.cpp
 	g++ -o mont main.cpp funcoes.cpp

@@ -1,9 +1,8 @@
 #include <iostream> //IO (printf, scanf, etc)
 #include <fstream> //IO de arquivos (fopen, etc)
 #include <sstream> //Manipulação de strings
-#include <iomanip> //Manipulaçao de IO (printar decimal como binario)
+#include <iomanip> //Manipulaçao de IO (printar decimal como hexadecimal)
 #include <vector> //TAD de lista
-#include <stack> //TAD de pilha
 #include <bitset> //Variável do tipo binario
 
 using namespace std;
