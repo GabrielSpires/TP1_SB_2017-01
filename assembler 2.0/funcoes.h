@@ -8,13 +8,13 @@
 using namespace std;
 
 typedef struct Tabela_tipos{
-	string nome_operacao;
-	int tipo_operacao;
+    string nome_operacao;
+    int tipo_operacao;
 }Tabela_tipos;
 
 typedef struct Label{
-	string nome_label;
-	int endereco_label;
+    string nome_label;
+    int endereco_label;
 }Label;
 
 int busca_tipo(string, vector<Tabela_tipos>);

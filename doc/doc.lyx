@@ -138,7 +138,33 @@ Introdução
 \end_layout
 
 \begin_layout Standard
-...
+Nesse trabalho prático foi implementado um montador para a CPU Swombat.
+ Um montador, que também pode ser chamado de assembler, consiste de um programa
+ que cria o código objeto traduzindo as instruções de um programa em assembly
+ para linguagem de máquina, ou seja, código binário que o computador entenda.
+ O tipo de montador desenvolvido foi o montador de dois passos.
+ 
+\end_layout
+
+\begin_layout Standard
+No primeiro dos passos, é feita uma varredura pelo programa inteiro em busca
+ de labels definidas, que são armazenadas em uma tabela juntamente da sua
+ posição no código.
+ Essa tabela é usada no segundo passo para resolver o problema de referencia
+ antecipada, que consiste em referenciar uma parte do código que ainda não
+ se sabe onde está.
+ 
+\end_layout
+
+\begin_layout Standard
+No passo dois também é usada uma tabela de tipos que contém todas as funções
+ com formato semelhante agrupadas em tipos, o que facilita na hora de traduzi-la
+s para código de máquina, uma vez que funções com mesmo formato são construídas
+ do mesmo jeito, com exceção do opcode.
+ A máquina utilizada contém apenas instruções de 16 bits, sendo elas escritas
+ byte a byte em uma memória de 256 bytes, isso significa que cada instrução
+ ocupa duas posições na memória (PC e PC+1 por exemplo) então as instruções
+ são buscadas incrementando o PC de 2 em 2.
 \end_layout
 
 \begin_layout Section
@@ -146,18 +172,196 @@ Desenvolvimento
 \end_layout
 
 \begin_layout Standard
-...Deve conter todas as decisões de projeto.
- 
-\end_layout
+O montador foi desenvolvido em C++ usando como saída o formato 
+\begin_inset Formula $.mif$
+\end_inset
 
-\begin_layout Subsection
-Programas testados
+ utilizado pelo CPUSim.
+ O formato 
+\begin_inset Formula $.mif$
+\end_inset
+
+ tem um cabeçalho que indica o tamanho da memória, quantos bits tem cada
+ posição de memória, a base dos endereços e a base dos dados na memória.
+ Para o Swombat, foi especificado que a memória tem 256 posições que contém
+ 8 bits cada de dados, os endereços são exibidos em hexadecimal e os dados
+ em binário.
+ No início do programa é chamada a função 
+\shape italic
+escreve_cabecalho_mif()
+\shape default
+ que imprime esse cabeçalho no arquivo de saída.
+ O cabeçalho é igual para todos os programas.
 \end_layout
 
 \begin_layout Standard
-...Deve conter informações sobre cada programa testado, sobre o que ele faz,
- entradas de dados, saída esperada, etc.
+O montador propriamente dito começa a ser executado com a função 
+\emph on
+preenche_tabela_tipos(),
+\emph default
+ que cria uma lista do tipo 
+\emph on
+Tabela_tipos
+\emph default
+ que é uma struct composta por uma string com o nome da operação (add, load,
+ etc), e um inteiro que identifica a qual tipo essa instrução pertence.
+ Essa função preenche a lista de tipos levando em consideração o número
+ de registradores/operandos que cada instrução usa, ou seja, o formato de
+ cada uma.
+ Instruções com o mesmo formato são escritas da mesma forma na memória,
+ com exceção do opcode, então é útil usar uma mesma função para escrever
+ todas as funções de um mesmo tipo.
+ Essa função também não depende de nenhuma entrada, uma vez que todas as
+ instruções do Swombat foram previamente definidas.
+\end_layout
+
+\begin_layout Standard
+A primeira coisa que temos que tratar no código é o problema de referência
+ antecipada, que consiste em chamar um procedimento que ainda não sabemos
+ onde está.
+ Isso é resolvido na função 
+\emph on
+preenche_lista_labels
+\emph default
+()
+\emph on
  
+\emph default
+que lê o código todo, linha por linha, em busca de cada label.
+ Ao encontrar uma label, a função guarda o seu nome e a posição em que a
+ label se encontra na lista, que fica disponível para consulta posterior.
+ Optamos aqui por criar uma lista de structs assim como na tabela de tipos,
+ dessa vez do tipo 
+\emph on
+Label
+\emph default
+, sendo que cada struct possui uma string com o nome da label e um inteiro
+ que guarda o endereço da label encontrada.
+\end_layout
+
+\begin_layout Standard
+A passagem dois começa na função 
+\emph on
+traduz_programa_fonte()
+\emph default
+ que usa as listas de tipo e de labels criadas anteriormente.
+ Nessa função vamos ler as instruções e traduzi-las para código de máquina.
+ Cada instrução tem um formato específico, então a cada operando lido uma
+ consulta é feita à tabela de tipos para identificar qual o formato da instrução.
+ Essa consulta é feita através da função 
+\emph on
+busca_tipo()
+\emph default
+ que recebe como parâmetros o nome do campo lido e a lista de tipos previamente
+ preenchida.
+ Dependendo do tipo da instrução lida, ela é construída de uma maneira diferente
+, por exemplo, a função 
+\emph on
+add
+\emph default
+ usa dois registradores e 5 bits não são utilizados, já a função 
+\emph on
+return
+\emph default
+ usa apenas o seu opcode, já que apenas retorna para o endereço contido
+ no topo da pilha, e por esse motivo 11 bits não são utilizados.
+ Após separar cada operando da instrução, ela é escrita na memória, sendo
+ os 8 primeiros bits em 
+\emph on
+memoria[pc]
+\emph default
+ e os 8 últimos bits em 
+\emph on
+memória[pc+1]
+\emph default
+.
+ O nome da variável 
+\emph on
+pc
+\emph default
+ não é tecnicamente correto uma vez que na verdade estamos referenciando
+ o valor do Intruction Location Counter (ILC), mas usamos esse nome para
+ facilitar a compreensão da estrutura da memória.
+ Existe uma variável chamada ILC nessa função, mas ela é usada apenas para
+ saber em qual posição da memória será escrita a ultima instrução, para
+ que os bytes alocados pela função 
+\emph on
+.data
+\emph default
+ sejam alocados a partir dessa posição.
+\end_layout
+
+\begin_layout Standard
+A instrução 
+\emph on
+.data
+\emph default
+ é na verdade uma pseudo instrução, e é construída diferente de todas as
+ outras.
+ Não existe 
+\emph on
+opcode
+\emph default
+ nessa instrução, na verdade a única informação gravada por 
+\emph on
+.data
+\emph default
+ na memória é o valor a ser alocado.
+ Para gravar de forma correta na memória o valor alocado, o número de bytes
+ a ser alocado é lido e guardado numa variável, assim como o valor a ser
+ alocado.
+ O valor lido é então convertido para binário e jogado em uma string.
+ Essa string inicialmente tem o tamanho da memória, ou seja, 256*8 bits.
+ Isso teve de ser feito, uma vez que o tipo de dados 
+\emph on
+bitset
+\emph default
+ usado para representar os números binários não pode ser alocado com tamanho
+ dinâmico, então optamos por alocar o tamanho máximo (espero que ninguém
+ tente alocar alguma coisa maior que a memória) e depois ler apenas os bits
+ relevantes.
+ Depois de ter os dados no formato correto a memória é gravada a partir
+ da posição indicada pelo ILC, ou seja, a posição imediatamente depois da
+ ultima instrução.
+ Os bits a serem gravados são lidos da esquerda para a direita em blocos
+ de 8 bits e gravados sequencialmente na memória enquanto o valor de ILC
+ é incrementado.
+\end_layout
+
+\begin_layout Section
+Programas testados
+\end_layout
+
+\begin_layout Subsection
+Programa 1
+\end_layout
+
+\begin_layout Subsubsection
+Descrição
+\end_layout
+
+\begin_layout Subsubsection
+Entrada de dados
+\end_layout
+
+\begin_layout Subsubsection
+Saída esperada
+\end_layout
+
+\begin_layout Subsection
+Programa 2
+\end_layout
+
+\begin_layout Subsubsection
+Descrição
+\end_layout
+
+\begin_layout Subsubsection
+Entrada de dados
+\end_layout
+
+\begin_layout Subsubsection
+Saída esperada
 \end_layout
 
 \begin_layout Section
@@ -165,13 +369,19 @@ Testes e simulações
 \end_layout
 
 \begin_layout Standard
-...Deve conter elementos que comprovem que o montador foi testado (Ex.: imagens
+\begin_inset Quotes eld
+\end_inset
+
+Deve conter elementos que comprovem que o montador foi testado (Ex.: imagens
  das telas de montagem e execução no CPUSim).
  Quaisquer arquivos relativos a testes devem ser enviados no pacote do trabalho,
  como mencionado na Seção 2.
  A documentação deve conter referências a esses arquivos, explicação do
  que eles fazem e dos resultados obtidos.
- 
+\begin_inset Quotes eld
+\end_inset
+
+ <-- apaga isso
 \end_layout
 
 \begin_layout Section
