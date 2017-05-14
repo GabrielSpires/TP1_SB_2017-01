@@ -69,6 +69,13 @@ void traduz_programa_fonte(ifstream *entrada,
         instrucao >> campo; //Lê a primeira informação da instrucao (operador ou label)
         
         if(campo[0] == '_') instrucao >> campo; //Se leu uma label, leia o prox. campo
+        if(campo[0] == '_'){ //Se ainda continua lendo a label é pq só tem a label na linha
+            getline(*entrada, le_instrucao, '\n'); //Lê a próxima linha
+            instrucao.str(string("")); //Limpa a string pra ler a proxima
+            instrucao.clear(); //Apaga o buffer da string
+            instrucao << le_instrucao; //Joga a string de le_instrucao na variavel instrucao
+            instrucao >> campo; //Lê a primeira informação da instrucao (operador)
+        }
 
         tipo = busca_tipo(campo, lista_tipos); //Busca na lista qual o tipo da instrução
         
@@ -226,6 +233,7 @@ void preenche_lista_labels(ifstream *entrada, vector<Label>& lista_labels, int *
             
             instrucao >> label;
             if(label == ".data") *ILC -= 2; //Se a instrução lida for .data não contar no ILC
+            else if (label[0] == '_') pc -=2; //Se continua lendo label não contar essa posição
         }
         pc += 2;
     }
