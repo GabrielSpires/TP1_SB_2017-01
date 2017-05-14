@@ -1,9 +1,13 @@
-loadc A0 10				;A0 <- 10
-push A0
-loadc A1 20				;A1 <- 20
-push A1
-pop A2					;A2 <- A1
-pop A3					;A3 <- A0
-add A2 A3				;A2 = A2 + A3
-storei A2 IO			;imprime valor de A2 na tela
-exit
+    loadi A0 IO         ;load IO -> A0
+    push A0             ;coloca o valor de A0 na pilha
+    loadi A1 IO         ;load IO ->  A1
+    push A1             ; coloca o valor de A1 na pilha
+    pop A3              ;A3 <- A1
+    pop A2              ;A2 <- A0
+    divide A2 A3        ;A2 = A2 / A3
+    storei A2 IO        ;imprime valor de A2 na tela
+    jmpn A2 _exit       ;encerra o programa caso A2 < 0
+    negate A4 A2        ;inverte o valor de A2 e guarda em A4
+    storei A4 IO        ;imprime o valor de de A4 na tela
+_exit: exit
+    exit

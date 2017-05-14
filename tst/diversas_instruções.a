@@ -1,5 +1,5 @@
-	loadc A0 10							; load 10 -> A0
-	loadc A1 5							; load 5 -> A1
+	loadi A0 IO							; load IO -> A0
+	loadi A1 IO							; load IO -> A1
 	add A0 A1							; A0 = A0 + A1
 	storei A0 IO						; Imprime o valor de A0 na tela
 	subtract A0 A1						; A0 = A0 - A1
@@ -8,8 +8,9 @@
 	loadc A3 -3							; A3 = -3
 	multiply A2 A3						; A2 = A2 * A3
 	storei A2 IO						; Imprime na tela o valor de A2
-	loadi A4 _input						; A4 = reg
+	loadi A4 _data						; A4 = reg
 	clear A0							; A0 = 0
 	add A0 A4							; A0 = A0 + A4
+	storei A0 IO						; imprime valor de A0 na tela
 	exit                   
-_input: .data 2 3						; A5 = valor digitado pelo usuário
+_data: .data 2 3							; A4 =  dois bytes de valor 3

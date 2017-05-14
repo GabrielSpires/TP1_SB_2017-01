@@ -1,7 +1,9 @@
-#LyX 2.1 created this file. For more info see http://www.lyx.org/
-\lyxformat 474
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
 \begin_document
 \begin_header
+\save_transient_properties true
+\origin unavailable
 \textclass article
 \begin_preamble
 \date{}
@@ -12,16 +14,16 @@
 \language_package default
 \inputencoding auto
 \fontencoding global
-\font_roman times
-\font_sans default
-\font_typewriter default
-\font_math auto
+\font_roman "times" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
 \font_default_family default
 \use_non_tex_fonts false
 \font_sc false
 \font_osf false
-\font_sf_scale 100
-\font_tt_scale 100
+\font_sf_scale 100 100
+\font_tt_scale 100 100
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -83,7 +85,7 @@ Trabalho Prático 1 - Montador
 \begin_layout Date
 \begin_inset Tabular
 <lyxtabular version="3" rows="2" columns="2">
-<features rotate="0" tabularvalignment="middle">
+<features tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <row>
@@ -340,12 +342,48 @@ Programa 1
 Descrição
 \end_layout
 
+\begin_layout Standard
+O programa de teste chama-se diversas_instruções.a.
+ Nesse programa são testadas alumas instruções, por exemplo, add, subtract,
+ loadi, storei, move, multiply, clear e loadc.
+ Primeiramente, são recebidos dois valores digitados pelo usuário; esses
+ valores são recebidos pelo instruções loadi.
+ Os dois valores são somados e o resultado é imprimido na tela.
+ Em seguida, o resultado da soma é subtraído do segundo valor digitado pelo
+ usuário e o valor da subtração é imprimido na tela.
+ O resultado da subtração é carregado para o registrador A2 usando a instrução
+ move, é carregado a constante -3 para o registrador A3 e é realizada a
+ multiplicação dos registradores A2 e A3.
+ O resultado da multiplicação é imprimido na tela.
+ Por fim, é carregado para o registrador A4 um dado de 2 bytes inicializado
+ com o valor 3, é limpado o registrador A0, é feita a soma de A0 com A4
+ e o resultado é imprimido na tela.
+\end_layout
+
 \begin_layout Subsubsection
 Entrada de dados
 \end_layout
 
+\begin_layout Standard
+Para realizar o teste desse programa, foi digitado como entrada os valores
+ 5 e -10.
+\end_layout
+
 \begin_layout Subsubsection
 Saída esperada
+\end_layout
+
+\begin_layout Standard
+Para os valores 5 e -10, a registrador A0 recebe 5 e o registrador A1 recebe
+ -10.
+ Logo a soma será -5.
+ A0 passará a ter o valor -5.
+ A subtração de A0 e A1 dará 5.
+ Esse valor será carregado para A2 onde fará a multiplicação com o registrador
+ A3, que terá o valor -3.
+ A multiplicação dará -15.
+ Por fim, a soma de A0, que teve seu valor limpo, com o registrador A4,
+ que recebeu o valor 3 alocado na memória, será 3.
 \end_layout
 
 \begin_layout Subsection
@@ -356,12 +394,49 @@ Programa 2
 Descrição
 \end_layout
 
+\begin_layout Standard
+O seguinte programa chama-se push_pop_teste.a.
+ O objetivo desse programa é fazer o uso da pilha utilizando as funções
+ push e pop.
+ São lidos dois valores de entrada e esses valores são armazenados na pilha.
+ Em seguida, os valores são desempilhados e é feita a divisão desses valores.
+ Imprime-se o resultado da divisão na tela.
+ Se a divisão for menor que zero, o programa chama uma label que encerra
+ o programa; caso contrário, o valor da divisão é invertido e esse novo
+ valor é imprimido na tela.
+ Vale ressaltar que o resultado da divisão é sempre arredondado para baixo.
+\end_layout
+
 \begin_layout Subsubsection
 Entrada de dados
 \end_layout
 
+\begin_layout Standard
+Como nesse programa existem dois tipos de saída possíveis, será fornecida
+ dois tipos de entradas diferentes.
+ A primeira entrada terá os valores 10 e 5.
+ A segunda entrada será com os valores -10 e 5.
+\end_layout
+
 \begin_layout Subsubsection
 Saída esperada
+\end_layout
+
+\begin_layout Standard
+Para a entrada com os valores 10 e 5, esses números serão empilhados e,
+ posteriormente, serão desempilhados para, enfim, ser feita a divisão.
+ Como o resultado da divisão é maior que zero, o valor da divisão, que é
+ 2, será invertido e esse novo valor será impresso na tela.
+ Logo, teremos dois valores impressos na tela, nesse caso 2 e -2.
+\end_layout
+
+\begin_layout Standard
+Para a entrada com os valores -10 e 5, esses número serão empilhados e depois,
+ desempilhados para ser feita a divisão.
+ O resultado da divisão é impresso na tela.
+ Como o resultado é menor que zero, nesse caso -2, o programa chamará a
+ label que encerrará a execução do programa.
+ Logo teremos apenas um número impresso na tela, nesse caso, o número -2.
 \end_layout
 
 \begin_layout Section
@@ -369,23 +444,358 @@ Testes e simulações
 \end_layout
 
 \begin_layout Standard
-\begin_inset Quotes eld
+As duas figuras a seguir estão relacionadas com a execução do programa diversas_
+instruções.a.
+ A primeira figura mostra os valores em cada registrador usado no programa
+ e a segunda figura mostra a saída para entrada 5 e -10.
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename Diversas_Instruções_Registradores.png
+	scale 40
+	rotateOrigin center
+
 \end_inset
 
-Deve conter elementos que comprovem que o montador foi testado (Ex.: imagens
- das telas de montagem e execução no CPUSim).
- Quaisquer arquivos relativos a testes devem ser enviados no pacote do trabalho,
- como mencionado na Seção 2.
- A documentação deve conter referências a esses arquivos, explicação do
- que eles fazem e dos resultados obtidos.
-\begin_inset Quotes eld
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Registradores diversas_instruções.a
+\end_layout
+
 \end_inset
 
- <-- apaga isso
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename Diversas_Intruções_Saida.png
+	scale 30
+	rotateOrigin center
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Saída para diversas_instruções.a
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As próximas figuras mostrarão a execução do programa push_pop_teste.a.
+ A primeira figura mostra o conteúdo dos registradores usados no programa
+ e a segunda figura mostra o resultado para a entrada 10 e 5.
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename Push_Pop_Teste_Registradores.png
+	scale 40
+	rotateOrigin center
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Registradores push_pop_teste.a
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename Push_Pop_Teste_Saida.png
+	scale 30
+	rotateOrigin center
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Saída push_pop_teste.a
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A seguir, teremos mais duas figuras para mostrar o estado dos registradores
+ e a saída para a entrada -10 e 5.
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename Push_Pop_Teste_Neg_Registradores.png
+	scale 40
+	rotateOrigin center
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Registradores push_pop_teste.a
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename Push_Pop_Teste_Neg_Saida.png
+	scale 30
+	rotateOrigin center
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Saída push_pop_teste.a
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
 Conclusão
+\end_layout
+
+\begin_layout Standard
+Em geral o desenvolvimento do montador não foi muito difícil, o que mais
+ gerou dúvidas foi o formato dos programas de entrada.
+ A escolha por C++ ao invés de C facilitou muito o desenvolvimento, uma
+ vez que optamos por trabalhar com números de tipo binário e vetores de
+ tamanho dinâmico para implementar as tabelas, em C isso teria de ser feito
+ de forma muito manual, o que criaria muitos problemas desnecessários.
+ Traduzir algumas funções como call e return foi muito mais simples do que
+ achávamos, já que muito do trabalho é feito exclusivamente pela máquina,
+ como manipular a pilha por exemplo.
+ Outro problema que encontramos na implementação foi a falta de padronização,
+ como a forma de alocar os bytes na função 
+\emph on
+.data
+\emph default
+ por exemplo, por esse motivo tentamos seguir o método que o CPUSim utiliza
+ o mais fielmente possível.
+ Em todos os testes, nossa memória foi escrita corretamente, sendo aceita
+ pelo CPUSim em cada um dos casos.
 \end_layout
 
 \end_body
