@@ -1,19 +1,14 @@
-;sequencia fibonacci
-;o programa para quando le um zero
-;testa jump, jmpz, call/return
-
-loadc A0 1
-loadc A1 2
-_start: loadi A2 IO
-    jmpz A2 _end
-    add A0 A1
-    call _troca_reg
-    storei A1 IO
-    jump _start
+loadc A0 1              ;sequencia fibonacci
+loadc A1 2              ;o programa para quando le um zero
+_start: loadi A2 IO     ;testa jump, jmpz, call/return
+        jmpz A2 _end
+        add A0 A1
+        call _troca_reg
+        storei A1 IO
+        jump _start
 _end: storei A1 IO
 exit
-_troca_reg:
-    move A3 A0
-    move A0 A1
-    move A1 A3
-return
+_troca_reg: move A3 A0
+            move A0 A1
+            move A1 A3
+            return
