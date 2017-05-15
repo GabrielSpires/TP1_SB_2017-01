@@ -152,10 +152,9 @@ Nesse trabalho prático foi implementado um montador para a CPU Swombat.
 No primeiro dos passos, é feita uma varredura pelo programa inteiro em busca
  de labels definidas, que são armazenadas em uma tabela juntamente da sua
  posição no código.
- Essa tabela é usada no segundo passo para resolver o problema de referencia
+ Essa tabela é usada no segundo passo para resolver o problema de referência
  antecipada, que consiste em referenciar uma parte do código que ainda não
  se sabe onde está.
- 
 \end_layout
 
 \begin_layout Standard
@@ -344,7 +343,7 @@ Descrição
 
 \begin_layout Standard
 O programa de teste chama-se diversas_instruções.a.
- Nesse programa são testadas alumas instruções, por exemplo, add, subtract,
+ Nesse programa são testadas algumas instruções, por exemplo, add, subtract,
  loadi, storei, move, multiply, clear e loadc.
  Primeiramente, são recebidos dois valores digitados pelo usuário; esses
  valores são recebidos pelo instruções loadi.
@@ -374,7 +373,7 @@ Saída esperada
 \end_layout
 
 \begin_layout Standard
-Para os valores 5 e -10, a registrador A0 recebe 5 e o registrador A1 recebe
+Para os valores 5 e -10, o registrador A0 recebe 5 e o registrador A1 recebe
  -10.
  Logo a soma será -5.
  A0 passará a ter o valor -5.
